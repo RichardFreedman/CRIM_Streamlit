@@ -456,7 +456,7 @@ else:
 
     #filter by piece with or without musical type
     st.subheader("Piece")
-    piece_frames = filter_by('piece', mt_sub, mt_full, 'y')
+    piece_frames = filter_by('piece_id', mt_sub, mt_full, 'y')
     piece_full = piece_frames[0]
     piece_sub = piece_frames[1]
     st.markdown('Resulting observations:')
