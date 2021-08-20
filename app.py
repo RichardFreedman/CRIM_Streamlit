@@ -462,6 +462,16 @@ else:
     st.markdown('Resulting observations:')
     st.write(piece_sub)
 
+    # view url via link
+
+    st.subheader("Enter Observation to View on CRIM Project")
+
+    prefix = "https://crimproject.org/observations/" 
+    int_val = st.text_input('Observation Number')
+    combined = prefix + int_val
+
+    st.markdown(combined, unsafe_allow_html=True)
+
     st.subheader('Download Filtered Results as CSV')
     userinput = st.text_input('Name of file for download (must include ".csv")', key='2')
     if st.button('Download without type details', key='9'):
@@ -573,6 +583,16 @@ else:
     dpiece_sub = dpiece_frames[1]
     st.markdown('Resulting relationships:')
     st.write(dpiece_sub)
+
+    # view url via link
+
+    st.subheader("Enter Relationship to View on CRIM Project")
+
+    prefix = "https://crimproject.org/relationships/" 
+    int_val = st.text_input('Relationship Number')
+    combined = prefix + int_val
+
+    st.markdown(combined, unsafe_allow_html=True)
 
     st.subheader('Download Filtered Results as CSV')
     userinput_r = st.text_input('Name of file for download (must include ".csv")', key='4')
