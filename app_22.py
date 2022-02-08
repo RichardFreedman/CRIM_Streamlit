@@ -400,32 +400,112 @@ df.rename(columns={'pk': 'id',
                      'fields.details.tone':  'cadence_tone',
                      'fields.details.irregular cadence': 'irreg_cadence',
                      'fields.details.features': 'features',
-}, inplace=True)
+                     'fields.details.dovetail cadence':  'dovetail',
+                     'fields.details.dovetail cadence voice':  'dovetail voice',
+                     'fields.details.dovetail voice name': 'dovetail_voice',
+                     'fields.details.dovetail position': 'dovetail_position',
+                     'fields.details.irregular roles': 'irregular_roles',
+                     'fields.details.cantizans': 'cantizans staff',
+                     'fields.details.tenorizans': 'tenorizans staff',
 
-drop_list = ['fields.definition',
+
+}, inplace=True)
+drop_list = ['model',
+                     'fields.definition',
                      'fields.ema',
                      'fields.remarks',
                      'fields.curated',
                      'fields.created',
                      'fields.updated',
+
                      'fields.details.voice name',
                      'fields.details.voice names',
                      'fields.details.voice name reg',
                      'fields.details.voice names reg',
                      'fields.details.voice',
                      'fields.details.voices',
+                     # 'fields.details.cantizans name',
+                     # 'fields.details.tenorizans name',
+                     'fields.details.cantizans name reg',
+                     'fields.details.tenorizans name reg',
+                     'fields.details.dovetail voice name reg',
                      ]
+
+df_clean = df.fillna("-").drop(columns=drop_list)
+
 
 df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
 df_r.rename(columns={'pk': 'id',
                     'fields.observer':'observer_name',
                     'fields.relationship_type': 'relationship_type',
                     'fields.model_observation': 'model_observation',
-                    'fields.derivative_observation': 'derivative_observation'}, inplace=True)
+                    'fields.derivative_observation': 'derivative_observation',
+                    'fields.details.type': 'type',
+                    'fields.details.self': 'self',
+                    'fields.details.activity': 'activity',
+                    'fields.details.extent': 'extent',
+                    'fields.details.new counter subject': 'new_countersubject',
+                    'fields.details.sounding in different voices': "sounding_diff_voices",
+                    'fields.details.whole passage transposed': 'whole_passage_transposed',
+                    'fields.details.whole passage metrically shifted': 'whole_passage_shifted',
+                    'fields.details.melodically inverted': 'melodically_inverted',
+                    'fields.details.retrograde': 'retrograde',
+                    'fields.details.double or invertible counterpoint': 'invertible_counterpoint',
+                    'fields.details.old counter subject shifted metrically': 'old_cs_shifted',
+                    'fields.details.old counter subject transposed': 'old_cs_transposed',
+                    'fields.details.new combination': 'new_combination',
+                    'fields.details.metrically shifted': 'metrically_shifted',
+                    'fields.details.transposition': 'transposition',
+                    'fields.details.systematic diminution': 'diminution',
+                    'fields.details.systematic augmentation': 'augmentation',
+                        }, inplace=True)
 
 
+r_drop_list = ['model',
+               'fields.definition',
+               'fields.curated',
+               'fields.created',
+               'fields.updated',
+               ]
+df_r_clean = df_r.fillna("-").drop(columns=r_drop_list)
 select_data = df[["id", "observer_name", "piece_id", "musical_type"]]
-select_data_r = df_r[['id', 'observer_name', 'relationship_type', 'model_observation', 'derivative_observation']]
+
+#  adds piece_ids and musical_types back into relationship dataframe
+# first:  the relevant data from the obs df:
+df_short = df[['id', 'piece_id', 'musical_type']]
+
+# now a pair of merges based on intersectino of obs ids in the two dfs:
+dfs_combined = pd.merge(df_r_clean,
+                     df_short,
+                     left_on='model_observation',
+                     right_on='id',
+                     how='outer')
+dfs_combined2 = pd.merge(dfs_combined ,
+                     df_short,
+                     left_on='derivative_observation',
+                     right_on='id',
+                     how='outer')
+# drop redundant columns
+dfs_combined2.drop(columns=['id', 'id_y'], inplace=True)
+# rename the new columns
+dfs_combined2.rename(columns={'id_x': 'id',
+                           'piece_id_x': "model",
+                           'piece_id_y': "derivative",
+                           'musical_type_x': 'model_musical_type',
+                           'musical_type_y': 'derivative_musical_type'}, inplace=True)
+df_r_with_obs = dfs_combined2
+
+select_data_r = df_r_with_obs[['id',
+                              'observer_name',
+                              'relationship_type',
+                              'model_observation',
+                              'derivative_observation',
+                              'model',
+                              'derivative',
+                              'model_musical_type',
+                              'derivative_musical_type',]]
+# just to test:
+# st.dataframe(select_data_r)
 
 
 # Sidebar options for _all_ data of a particular type
@@ -437,7 +517,7 @@ if st.sidebar.checkbox('Select Observation Tables and Charts'):
     st.header("Observations")
     if st.sidebar.checkbox('All Observation Metadata Fields'):
         st.subheader('All CRIM Observations with All Metadata')
-        st.write(df)
+        st.write(df_clean)
 
     if st.sidebar.checkbox('Observer, Piece, Musical Type'):
         st.subheader('Summary: Observer, Piece, Musical Type')
@@ -464,238 +544,31 @@ if st.sidebar.checkbox('Select Observation Tables and Charts'):
         if showpiece:
            draw_chart("piece_id", "countpiece", df)
 
-# if st.sidebar.checkbox('Select Observation Charts'):
-#     # if st.sidebar.checkbox('All Observation Metadata Fields'):
-#     #     st.subheader("Graphical representation of result")
-#         showtype = st.checkbox('By musical type', value=False)
-#         showpiece = st.checkbox('By piece', value=False)
-#         if showtype:
-#            draw_mt_chart(df)
-#         if showpiece:
-#            draw_chart("piece_id", "countpiece", piece_sub)
+    st.subheader("Enter Observation to View on CRIM Project")
 
+    prefix = "https://crimproject.org/observations/"
+    int_val = st.text_input('Observation Number')
+    combined = prefix + int_val
 
+    st.markdown(combined, unsafe_allow_html=True)
+    st.sidebar.markdown("---")
 
-   # showall = st.sidebar.checkbox('Show Subtypes for all Observations', value=False)
-   # if showall:
-   #     st.header("Subtype Charts for All Pieces")
-   #     if df['musical_type'].isin(['fuga']).any():
-   #         fg_dict = {'Subtypes':['periodic', 'sequential', 'inverted', 'retrograde'],
-   #         'count': [
-   #             df['periodic'].sum(),
-   #             df['sequential'].sum(),
-   #             df['inverted'].sum(),
-   #             df['retrograde'].sum(),
-   #         ]}
-   #         df_fg = pd.DataFrame(data=fg_dict)
-   #         chart_fg = alt.Chart(df_fg).mark_bar().encode(
-   #             x = 'count',
-   #             y = 'Subtypes',
-   #         )
-   #         text_fg = chart_fg.mark_text(
-   #             align='left',
-   #             baseline='middle',
-   #             dx=3
-   #         ).encode(
-   #             text = 'count'
-   #         )
-   #         st.write("Fuga Subtypes from Filtered View Above")
-   #         st.write(chart_fg+text_fg)
+#  Filter views There
 
-# showfiltered = st.checkbox('Show subtype charts for filtered results', value=False)
-# if showfiltered:
-#     selected_types = df['musical_type'].unique().tolist()
-#     for mt in selected_types:
-#       get_subtype_charts(selected_types, df)
-#       if str(mt) in ['cadence', 'fuga', 'periodic entry', 'imitative duo', 'non-imitative duo', 'homorythm']:
-#           st.write('Type: ' + str(mt))
-#           get_subtype_charts(mt, piece_full)
-
-
-
-st.sidebar.header("Relationship Tables and Charts")
-
-if st.sidebar.checkbox('Select Relationship Tables and Charts'):
-    st.markdown("---")
-    st.header("Relationships")
-    if st.sidebar.checkbox('All Relationship Metadata Fields'):
-        st.subheader('All Relationship Metadata Fields')
-        st.write(df_r)
-
-    if st.sidebar.checkbox('Observer, Relationship Type, Model, Derivative'):
-        st.subheader('Selected Metadata:  Observer, Relationship Type, Model Observation ID, Derivative Observation ID')
-        st.write(select_data_r)
-
-    if st.sidebar.checkbox('Relationships per Analyst'):
-        st.subheader('Total Relationships per Analyst')
-        st.write(df_r['observer_name'].value_counts())
-
-    if st.sidebar.checkbox('Relationships per Type'):
-        st.subheader('Total Relationships per Type')
-        st.write(df_r['relationship_type'].value_counts())
-
-    if st.sidebar.checkbox('Relationship Charts'):
-      st.subheader("Relationships by Main Type")
-      qt_count = df_r['relationship_type'].str.match('quotation').values.sum()
-      tm_count = df_r['relationship_type'].str.match('mechanical transformation').values.sum()
-      tnm_count = df_r['relationship_type'].str.match('non-mechanical transformation').values.sum()
-      om_count = df_r['relationship_type'].str.match('omission').values.sum()
-      nm_count = df_r['relationship_type'].str.match('new material').values.sum()
-
-      rt_dict = {'Relationship Types':['Quotation', 'Mechanical transformation', 'Non-mechanical transformation', 'Omission', 'New Materia'],
-                  'count': [qt_count, tm_count, tnm_count, om_count, nm_count]}
-      df_rt = pd.DataFrame(data=rt_dict)
-      chart_rt = alt.Chart(df_rt).mark_bar().encode(
-          x = 'count',
-          y = 'Relationship Types',
-      )
-      text_rt = chart_rt.mark_text(
-          align='left',
-          baseline='middle',
-          dx=3
-      ).encode(
-          text = 'count'
-      )
-      st.write(chart_rt+text_rt)
-
-      st.subheader("Relationship Subtypes Charts")
-      if st.checkbox('Quotation Types'):
-          st.subheader("Quotation Types")
-          # Quotation Chart
-          exact = df_r['fields.details.type'].str.match('exact')
-          monnayage = df_r['fields.details.type'].str.match('monnayage')
-          rl_q_dict = {'Quotation Subtype':['exact','monnayage'],
-                      'countrltypes': [
-                          exact.sum(),
-                          monnayage.sum(),
-                      ]}
-          df_rl_q = pd.DataFrame(data=rl_q_dict)
-          chart_rl_q = alt.Chart(df_rl_q).mark_bar().encode(
-              x = 'countrltypes',
-              y = 'Quotation Subtype',
-          )
-          text_rl_q = chart_rl_q.mark_text(
-              align='left',
-              baseline='middle',
-              dx=3
-          ).encode(
-              text = 'countrltypes'
-          )
-          st.write(chart_rl_q+text_rl_q)
-
-      if st.checkbox('Mechanical Transformation'):
-          st.subheader("Mechanical Transformation Subtypes")
-      # Mechanical Trans Chart
-      #  later add diminution and augmentation once these are in the JSON
-      # add kind of transposition (as three types?)
-          sound_diff = df_r['relationship_type'].str.match('mechanical transformation') & df_r['fields.details.sounding in different voices']
-          melodically_inverted = df_r['relationship_type'].str.match('mechanical transformation') & df_r['fields.details.melodically inverted']
-          retrograde = df_r['relationship_type'].str.match('mechanical transformation') & df_r['fields.details.retrograde']
-          metrically_shifted = df_r['fields.details.metrically shifted']
-          double_cpt = df_r['relationship_type'].str.match('mechanical transformation') & df_r['fields.details.double or invertible counterpoint']
-          # diminution = df_r['fields.details.systematic diminution']
-          # augmentation = df_r['fields.details.systematic augmentation']
-          rl_mt_dict = {'Mechanical Transformation Subtype':['sounding in different voices','melodically inverted', 'retrograde','metrically shifted', 'double or invertible counterpoint'],
-                      'countrltypes': [
-                          sound_diff.sum(),
-                          melodically_inverted.sum(),
-                          retrograde.sum(),
-                          metrically_shifted.sum(),
-                          double_cpt.sum(),
-                          # diminution.sum(),
-                          # augmentation.sum()
-                          # transposition,
-                      ]}
-          df_rl_mt = pd.DataFrame(data=rl_mt_dict)
-          chart_rl_mt = alt.Chart(df_rl_mt).mark_bar().encode(
-              x = 'countrltypes',
-              y = 'Mechanical Transformation Subtype',
-          )
-          text_rl_mt = chart_rl_mt.mark_text(
-              align='left',
-              baseline='middle',
-              dx=3
-          ).encode(
-              text = 'countrltypes'
-          )
-          st.write(chart_rl_mt+text_rl_mt)
-
-      if st.checkbox('Non-Mechanical Transformation'):
-          st.subheader("Non-Mechanical Transformation Subtypes")
-          # Non Mechanical Trans Chart
-          #  later double counterpoint once in the JSON
-          sound_diff = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['fields.details.sounding in different voices']
-          melodically_inverted = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['fields.details.melodically inverted']
-          retrograde = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['fields.details.retrograde']
-          metrically_shifted = df_r['fields.details.whole passage metrically shifted']
-          transposed = df_r['fields.details.whole passage transposed']
-          new_cs = df_r['fields.details.new counter subject']
-          old_cs_tr = df_r['fields.details.old counter subject transposed']
-          old_cs_ms = df_r['fields.details.old counter subject shifted metrically']
-          new_comb = df_r['fields.details.new combination']
-          # double_cpt = df_r['fields.relationship_type'].str.match('non-mechanical transformation') & df_r['fields.details.double or invertible counterpoint']
-
-
-          rl_nmt_dict = {'Non-Mechanical Transformation Subtype':['sounding in different voices','melodically inverted', 'retrograde',
-          'metrically shifted', 'transposed', 'new counter subject', 'old counter subject transposed', 'old counter subject shifted metrically'
-          , 'new combination'],
-                      'countrltypes': [
-                          sound_diff.sum(),
-                          melodically_inverted.sum(),
-                          retrograde.sum(),
-                          metrically_shifted.sum(),
-                          transposed.sum(),
-                          new_cs.sum(),
-                          old_cs_tr.sum(),
-                          old_cs_ms.sum(),
-                          new_comb.sum(),
-                          # diminution.sum(),
-                          # augmentation.sum(),
-                      ]}
-          df_rl_nmt = pd.DataFrame(data=rl_nmt_dict)
-          chart_rl_nmt = alt.Chart(df_rl_nmt).mark_bar().encode(
-              x = 'countrltypes',
-              y = 'Non-Mechanical Transformation Subtype',
-          )
-          text_rl_nmt = chart_rl_nmt.mark_text(
-              align='left',
-              baseline='middle',
-              dx=3
-          ).encode(
-              text = 'countrltypes'
-          )
-          st.write(chart_rl_nmt+text_rl_nmt)
-
-# st.subheader("All Data and MEI Views")
-# sa = st.text_input('Name of file for download (must include ".csv")')
-# ## Button to download CSV of results
-# if st.button('Download Complete Dataset as CSV'):
-#     #s = st.text_input('Enter text here')
-#     tmp_download_link = download_link(df, sa, 'Click here to download your data!')
-#     st.markdown(tmp_download_link, unsafe_allow_html=True)
-
-
-
-
-
-
-
-
-# st.sidebar.markdown("---")
 st.sidebar.header("Filter Observations")
-if st.sidebar.checkbox('Filter Observations'):
+if st.sidebar.checkbox('Select Observations'):
    st.sidebar.subheader("The order of filtering matters!")
    st.sidebar.write("You can begin by selecting pieces, then filter by type; or the reverse.")
    st.markdown("---")
-   st.header("Filtered Observations")
+
 
 # from linh:
 
     # from LINH
-   order = st.sidebar.radio("Select order to filter data: ", ('Piece then Musical Type', 'Musical Type then Piece'))
-   if (order == 'Piece then Musical Type'):
+   order = st.sidebar.radio("Select order to filter data: ", ('Piece > Musical Type', 'Musical Type > Piece'))
+   if (order == 'Piece > Musical Typ'):
         #filter by piece
-        st.sidebar.subheader("Filter by Piece")
+        st.sidebar.subheader("Filter by piece")
         piece_frames = filter_by("piece_id", select_data, df, 'a')
         piece_full = piece_frames[0]
         piece_sub = piece_frames[1]
@@ -703,13 +576,13 @@ if st.sidebar.checkbox('Filter Observations'):
         #st.write(piece_sub)
 
         #filter by type with or without piece
-        st.sidebar.subheader("Filter by Musical Type")
+        st.sidebar.subheader("Then filter by musical type")
         mt_frames = filter_by('musical_type', piece_sub, piece_full, 'b')
         mt_full = mt_frames[0]
         mt_sub = mt_frames[1]
         mt_drop_cols = mt_full.drop(columns=drop_list)
         st.subheader("Filtered Observations")
-        st.write(mt_full)
+        st.write(mt_drop_cols)
         # st.write(mt_drop_cols)
 
         showfiltered = st.sidebar.checkbox('Show subtype charts for filtered results', value=False)
@@ -969,7 +842,7 @@ if st.sidebar.checkbox('Filter Observations'):
         st.subheader("Enter Observation to View on CRIM Project")
 
         prefix = "https://crimproject.org/observations/"
-        int_val = st.text_input('Observation Number')
+        int_val = st.text_input('Enter Observation Number')
         combined = prefix + int_val
 
         st.markdown(combined, unsafe_allow_html=True)
@@ -982,36 +855,25 @@ if st.sidebar.checkbox('Filter Observations'):
         if st.button('Download with type details', key='12'):
             download_csv(mt_full, userinput)
 
-#  THESE TWO WORK CORRECTLY
-    # show_types = st.checkbox('Show Distribution of Musical Types in Filtered Results', value=False)
-    # if show_types:
-    #     st.subheader("Distribution of Musical Types in Filtered Results Above")
-    #     musical_types = mt_sub['musical_type'].value_counts()
-    #     st.write(musical_types)
-    #
-    # show_pieces = st.checkbox('Show Distribution of Pieces in Filtered Results', value=False)
-    # if show_pieces:
-    #     st.subheader("Distribution of Pieces in Filtered Results Above")
-    #     piece_ids = mt_sub['piece_id'].value_counts()
-    #     st.write(piece_ids)
-    #
+
    else:
     #filter by musical type
     #filter by type with or without piece
 
-        st.sidebar.subheader("Musical Type")
+        st.sidebar.subheader("Filter by Musical Type")
         mt_frames = filter_by('musical_type', select_data, df, 'z')
         mt_full = mt_frames[0]
         mt_sub = mt_frames[1]
         #st.write(mt_full)
 
         #filter by piece with or without musical type
-        st.sidebar.subheader("Piece")
+        st.sidebar.subheader("Then Filter by Piece")
         piece_frames = filter_by('piece_id', mt_sub, mt_full, 'y')
         piece_full = piece_frames[0]
         piece_sub = piece_frames[1]
+        piece_drop_cols = piece_full.drop(columns=drop_list)
         st.subheader('Filtered Observations')
-        st.write(piece_sub)
+        st.write(piece_drop_cols)
     # view url via link
         showfiltered = st.sidebar.checkbox('Show subtype charts for filtered results', value=False)
         if showfiltered:
@@ -1266,15 +1128,7 @@ if st.sidebar.checkbox('Filter Observations'):
                 )
                 st.write("Cadence Tones from Filtered View Above")
                 st.write(chart_ct+text_ct)
-# 2/6 THIS IS PULLING FULL DATA, noT FILTERED
 
-            # st.subheader("Graphical representation of result")
-            # showtype = st.checkbox('By musical type', value=False)
-            # showpiece = st.checkbox('By piece', value=False)
-            # if showtype:
-            #    draw_mt_chart(piece_sub)
-            # if showpiece:
-            #    draw_chart("piece_id", "countpiece", piece_sub)
 # THIS IS OK
         st.subheader("Enter Observation to View on CRIM Project")
 
@@ -1291,341 +1145,238 @@ if st.sidebar.checkbox('Filter Observations'):
         st.write('or')
         if st.button('Download with type details', key='10'):
             download_csv(piece_full, userinput)
-# FIX HERE
 
 
 
-    # showfiltered = st.checkbox('Show subtype charts for filtered results here', value=False)
-    # if showfiltered:
-    #     selected_types = piece_sub['musical_type'].unique().tolist()
-    #     for mt in selected_types:
-    #         if str(mt).lower() in ['cadence', 'fuga', 'periodic entry', 'imitative duo', 'non-imitative duo', 'homorythm']:
-    #             st.write('Type: ' + str(mt))
-    #             get_subtype_charts(mt, piece_full)
+
+st.sidebar.markdown("---")
+st.sidebar.header("Relationship Tables and Charts")
+
+if st.sidebar.checkbox('Select Relationship Tables and Charts'):
+    st.markdown("---")
+    st.header("Relationships")
+    if st.sidebar.checkbox('All Relationship Metadata Fields'):
+        st.subheader('All Relationship Metadata Fields')
+        st.write(df_r_clean)
+
+    if st.sidebar.checkbox('Observer, Relationship Type, Model, Derivative'):
+        st.subheader('Selected Metadata:  Observer, Relationship Type, Model Observation ID, Derivative Observation ID')
+        st.write(select_data_r)
+
+    if st.sidebar.checkbox('Relationships by Analyst'):
+        st.subheader('Total Relationships by Analyst')
+        st.write(df_r['observer_name'].value_counts())
+
+    if st.sidebar.checkbox('Relationships by Type'):
+        st.subheader('Total Relationships by Type')
+        st.write(df_r['relationship_type'].value_counts())
+
+    if st.sidebar.checkbox('Relationship Charts'):
+      st.subheader("Relationships by Main Type")
+      qt_count = df_r['relationship_type'].str.match('quotation').values.sum()
+      tm_count = df_r['relationship_type'].str.match('mechanical transformation').values.sum()
+      tnm_count = df_r['relationship_type'].str.match('non-mechanical transformation').values.sum()
+      om_count = df_r['relationship_type'].str.match('omission').values.sum()
+      nm_count = df_r['relationship_type'].str.match('new material').values.sum()
+
+      rt_dict = {'Relationship Types':['Quotation', 'Mechanical transformation', 'Non-mechanical transformation', 'Omission', 'New Materia'],
+                  'count': [qt_count, tm_count, tnm_count, om_count, nm_count]}
+      df_rt = pd.DataFrame(data=rt_dict)
+      chart_rt = alt.Chart(df_rt).mark_bar().encode(
+          x = 'count',
+          y = 'Relationship Types',
+      )
+      text_rt = chart_rt.mark_text(
+          align='left',
+          baseline='middle',
+          dx=3
+      ).encode(
+          text = 'count'
+      )
+      st.write(chart_rt+text_rt)
+
+      st.subheader("Relationship Subtypes Charts")
+      if st.checkbox('Quotation Types'):
+          st.subheader("Quotation Types")
+          # Quotation Chart
+          exact = df_r['fields.details.type'].str.match('exact')
+          monnayage = df_r['fields.details.type'].str.match('monnayage')
+          rl_q_dict = {'Quotation Subtype':['exact','monnayage'],
+                      'countrltypes': [
+                          exact.sum(),
+                          monnayage.sum(),
+                      ]}
+          df_rl_q = pd.DataFrame(data=rl_q_dict)
+          chart_rl_q = alt.Chart(df_rl_q).mark_bar().encode(
+              x = 'countrltypes',
+              y = 'Quotation Subtype',
+          )
+          text_rl_q = chart_rl_q.mark_text(
+              align='left',
+              baseline='middle',
+              dx=3
+          ).encode(
+              text = 'countrltypes'
+          )
+          st.write(chart_rl_q+text_rl_q)
+
+      if st.checkbox('Mechanical Transformation Types'):
+          st.subheader("Mechanical Transformation Types")
+      # Mechanical Trans Chart
+      #  later add diminution and augmentation once these are in the JSON
+      # add kind of transposition (as three types?)
+          sound_diff = df_r['relationship_type'].str.match('mechanical transformation') & df_r['sounding_diff_voices']
+          melodically_inverted = df_r['relationship_type'].str.match('mechanical transformation') & df_r['melodically_inverted']
+          retrograde = df_r['relationship_type'].str.match('mechanical transformation') & df_r['retrograde']
+          metrically_shifted = df_r['relationship_type'].str.match('mechanical transformation') & df_r['metrically_shifted']
+          double_cpt = df_r['relationship_type'].str.match('mechanical transformation') & df_r['invertible_counterpoint']
+          diminution = df_r['relationship_type'].str.match('mechanical transformation') & df_r['diminution']
+          augmentation = df_r['relationship_type'].str.match('mechanical transformation') & df_r['augmentation']
+
+          # diminution = df_r['fields.details.systematic diminution']
+          # augmentation = df_r['fields.details.systematic augmentation']
+          rl_mt_dict = {'Mechanical Transformation Subtype':['sounding in different voices','melodically inverted',
+          'retrograde','metrically shifted', 'invertible counterpoint', 'diminution', 'augmentation'],
+                      'countrltypes': [
+                          sound_diff.sum(),
+                          melodically_inverted.sum(),
+                          retrograde.sum(),
+                          metrically_shifted.sum(),
+                          double_cpt.sum(),
+                          diminution.sum(),
+                          augmentation.sum()
+                          # transposition,
+                      ]}
+          df_rl_mt = pd.DataFrame(data=rl_mt_dict)
+          chart_rl_mt = alt.Chart(df_rl_mt).mark_bar().encode(
+              x = 'countrltypes',
+              y = 'Mechanical Transformation Subtype',
+          )
+          text_rl_mt = chart_rl_mt.mark_text(
+              align='left',
+              baseline='middle',
+              dx=3
+          ).encode(
+              text = 'countrltypes'
+          )
+          st.write(chart_rl_mt+text_rl_mt)
+
+      if st.checkbox('Non-Mechanical Transformation Types'):
+          st.subheader("Non-Mechanical Transformation Types")
+          # Non Mechanical Trans Chart
+          sound_diff = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['sounding_diff_voices']
+          melodically_inverted = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['melodically_inverted']
+          retrograde = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['retrograde']
+          metrically_shifted = df_r['relationship_type'].str.match('non-mechanical transformation') &  df_r['whole_passage_shifted']
+          transposed =  df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['whole_passage_transposed']
+          new_cs = df_r['relationship_type'].str.match('non-mechanical transformation') &  df_r['new_countersubject']
+          old_cs_tr = df_r['relationship_type'].str.match('non-mechanical transformation') &  df_r['old_cs_transposed']
+          old_cs_ms = df_r['relationship_type'].str.match('non-mechanical transformation') &  df_r['old_cs_shifted']
+          new_comb = df_r['relationship_type'].str.match('non-mechanical transformation') &  df_r['new_combination']
+          double_cpt = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['invertible_counterpoint']
+          diminution = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['diminution']
+          augmentation = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['augmentation']
 
 
-    # show_types = st.checkbox('Show Distribution of Musical Types in Results', value=False)
-    # if show_types:
-    #     st.subheader("Distribution of Musical Types in Results ")
-    #     musical_types = mt_sub['musical_type'].value_counts()
-    #     st.write(musical_types)
+          rl_nmt_dict = {'Non-Mechanical Transformation Subtype':['sounding in different voices','melodically inverted', 'retrograde',
+          'metrically shifted', 'transposed', 'new counter subject', 'old counter subject transposed', 'old counter subject shifted metrically'
+          , 'new combination', 'diminution', 'augmentation'],
+                      'countrltypes': [
+                          sound_diff.sum(),
+                          melodically_inverted.sum(),
+                          retrograde.sum(),
+                          metrically_shifted.sum(),
+                          transposed.sum(),
+                          new_cs.sum(),
+                          old_cs_tr.sum(),
+                          old_cs_ms.sum(),
+                          new_comb.sum(),
+                          diminution.sum(),
+                          augmentation.sum(),
+                      ]}
+          df_rl_nmt = pd.DataFrame(data=rl_nmt_dict)
+          chart_rl_nmt = alt.Chart(df_rl_nmt).mark_bar().encode(
+              x = 'countrltypes',
+              y = 'Non-Mechanical Transformation Subtype',
+          )
+          text_rl_nmt = chart_rl_nmt.mark_text(
+              align='left',
+              baseline='middle',
+              dx=3
+          ).encode(
+              text = 'countrltypes'
+          )
+          st.write(chart_rl_nmt+text_rl_nmt)
 
-    # show_pieces = st.checkbox('Show Distribution of Pieces in Results', value=False)
-    # if show_pieces:
-    #     piece_ids = mt_sub['piece_id'].value_counts()
-    #     # st.write(piece_ids)
-    #     st.write(mt_sub)
-    # if show_pieces_2:
-    #     st.subheader("Distribution of Pieces in Results ")
-    #     piece_ids_2 = mt_sub_2['piece_id'].value_counts()
-    #     st.write(piece_ids_2)
-    # st.subheader("Graphical representation of result")
-    # showtype = st.checkbox('By musical type', value=False)
-    # showpiece = st.checkbox('By piece', value=False)
-    # if showtype:
-    #     draw_mt_chart(piece_full)
-    # if showpiece:
-    #     draw_chart("piece", "countpiece", piece_sub)
+    st.sidebar.markdown("---")
 
-    # showfiltered = st.checkbox('Show subtype charts for filtered results', value=False)
-    # if showfiltered:
-    #     selected_types = piece_sub['musical_type'].unique().tolist()
-    #     for mt in selected_types:
-    #         if str(mt).lower() in ['cadence', 'fuga', 'periodic entry', 'imitative duo', 'non-imitative duo', 'homorythm']:
-    #             st.write('Type: ' + str(mt))
-    #             get_subtype_charts(mt, piece_full)
+    st.subheader("Enter Relationship to View on CRIM Project")
 
-    # st.subheader("Charts by Type")
-    # showtype = st.checkbox('By musical type', value=False)
-    # showpiece = st.checkbox('By piece', value=False)
-    # if showtype:
-    #     draw_mt_chart(piece_full)
-    # if showpiece:
-    #     draw_chart("piece", "countpiece", piece_sub)
+    prefix = "https://crimproject.org/relationships/"
+    int_val = st.text_input('Relationship Number')
+    combined = prefix + int_val
 
-    # showfiltered = st.checkbox('Show subtype charts for filtered results', value=False)
-    # if showfiltered:
-    #     selected_types = piece_sub['musical_type'].unique().tolist()
-    #     for mt in selected_types:
-    #         if str(mt).lower() in ['cadence', 'fuga', 'periodic entry', 'imitative duo', 'non-imitative duo', 'homorythm']:
-    #             st.write('Type: ' + str(mt))
-    #             # get_subtype_charts(mt, piece_full)
-    #             get_subtype_charts(mt, piece_sub)
+    st.markdown(combined, unsafe_allow_html=True)
+    st.sidebar.markdown("---")
 
-
-st.markdown("---")
-
-# st.markdown("---")
-# st.header("RELATIONSHIP VIEWER")
-
-# THE FOLLOWING WILL NOT WORK UNTIL WE CAN RECOVER MODEL ID FROM OBSERVATIONS DF FOR A GIVEN OBS ID
-# WHICH IS LISTED IN THE RELATIONSHIP DF AS ID ONLY.
-# SAME FOR DERIVATIVE
-# order = st.radio("Select order to filter data: ", ('Pieces then Relationship Type', 'Relationship Type then Pieces'))
-# if (order == 'Pieces then Relationship Type'):
-#     # filter by pieces
-#     st.subheader("Model Piece")
-#     mpiece_frames = filter_by("model", select_data_r, df_r, 'c')
-#     mpiece_full = mpiece_frames[0]
-#     mpiece_sub = mpiece_frames[1]
-
-#     st.subheader("Derivative Piece")
-#     dpiece_frames = filter_by("derivative", mpiece_sub, mpiece_full, 'd')
-#     dpiece_full = dpiece_frames[0]
-#     dpiece_sub = dpiece_frames[1]
-
-#     #filter by type with or without pieces
-
-# st.sidebar.subheader("Relationships by Type")
-# qt_count = df_r['relationship_type'].str.match('quotation').values.sum()
-# tm_count = df_r['relationship_type'].str.match('mechanical transformation').values.sum()
-# tnm_count = df_r['relationship_type'].str.match('non-mechanical transformation').values.sum()
-# om_count = df_r['relationship_type'].str.match('omission').values.sum()
-# nm_count = df_r['relationship_type'].str.match('new material').values.sum()
-#
-# rt_dict = {'Relationship Types':['Quotation', 'Mechanical transformation', 'Non-mechanical transformation', 'Omission', 'New Materia'],
-#             'count': [qt_count, tm_count, tnm_count, om_count, nm_count]}
-# df_rt = pd.DataFrame(data=rt_dict)
-# chart_rt = alt.Chart(df_rt).mark_bar().encode(
-#     x = 'count',
-#     y = 'Relationship Types',
-# )
-# text_rt = chart_rt.mark_text(
-#     align='left',
-#     baseline='middle',
-#     dx=3
-# ).encode(
-#     text = 'count'
-# )
-# st.write(chart_rt+text_rt)
-
-# st.subheader("Relationship Subtypes Charts")
-# if st.checkbox('Quotation Types'):
-#     st.subheader("Quotation Subtypes")
-#     # Quotation Chart
-#     exact = df_r['fields.quotation type'].str.match('exact')
-#     monnayage = df_r['fields.quotation type'].str.match('monnayage')
-#     rl_q_dict = {'Quotation Subtype':['exact','monnayage'],
-#                 'countrltypes': [
-#                     exact.sum(),
-#                     monnayage.sum(),
-#                 ]}
-#     df_rl_q = pd.DataFrame(data=rl_q_dict)
-#     chart_rl_q = alt.Chart(df_rl_q).mark_bar().encode(
-#         x = 'countrltypes',
-#         y = 'Quotation Subtype',
-#     )
-#     text_rl_q = chart_rl_q.mark_text(
-#         align='left',
-#         baseline='middle',
-#         dx=3
-#     ).encode(
-#         text = 'countrltypes'
-#     )
-#     st.write(chart_rl_q+text_rl_q)
-#
-# if st.checkbox('Mechanical Transformation'):
-#     st.subheader("Mechanical Transformation Subtypes")
-# # Mechanical Trans Chart
-# #  later add diminution and augmentation once these are in the JSON
-# # add kind of transposition (as three types?)
-#     sound_diff = df_r['relationship_type'].str.match('mechanical transformation') & df_r['fields.details.sounding in different voices']
-#     melodically_inverted = df_r['relationship_type'].str.match('mechanical transformation') & df_r['fields.details.melodically inverted']
-#     retrograde = df_r['relationship_type'].str.match('mechanical transformation') & df_r['fields.details.retrograde']
-#     metrically_shifted = df_r['fields.details.metrically shifted']
-#     double_cpt = df_r['relationship_type'].str.match('mechanical transformation') & df_r['fields.details.double or invertible counterpoint']
-#     # diminution = df_r['fields.details.systematic diminution']
-#     # augmentation = df_r['fields.details.systematic augmentation']
-#     rl_mt_dict = {'Mechanical Transformation Subtype':['sounding in different voices','melodically inverted', 'retrograde','metrically shifted', 'double or invertible counterpoint'],
-#                 'countrltypes': [
-#                     sound_diff.sum(),
-#                     melodically_inverted.sum(),
-#                     retrograde.sum(),
-#                     metrically_shifted.sum(),
-#                     double_cpt.sum(),
-#                     # diminution.sum(),
-#                     # augmentation.sum()
-#                     # transposition,
-#                 ]}
-#     df_rl_mt = pd.DataFrame(data=rl_mt_dict)
-#     chart_rl_mt = alt.Chart(df_rl_mt).mark_bar().encode(
-#         x = 'countrltypes',
-#         y = 'Mechanical Transformation Subtype',
-#     )
-#     text_rl_mt = chart_rl_mt.mark_text(
-#         align='left',
-#         baseline='middle',
-#         dx=3
-#     ).encode(
-#         text = 'countrltypes'
-#     )
-#     st.write(chart_rl_mt+text_rl_mt)
-#
-# if st.checkbox('Non-Mechanical Transformation'):
-#     st.subheader("Non-Mechanical Transformation Subtypes")
-#     # Non Mechanical Trans Chart
-#     #  later double counterpoint once in the JSON
-#     sound_diff = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['fields.details.sounding in different voices']
-#     melodically_inverted = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['fields.details.melodically inverted']
-#     retrograde = df_r['relationship_type'].str.match('non-mechanical transformation') & df_r['fields.details.retrograde']
-#     metrically_shifted = df_r['fields.details.whole passage metrically shifted']
-#     transposed = df_r['fields.details.whole passage transposed']
-#     new_cs = df_r['fields.details.new counter subject']
-#     old_cs_tr = df_r['fields.details.old counter subject transposed']
-#     old_cs_ms = df_r['fields.details.old counter subject shifted metrically']
-#     new_comb = df_r['fields.details.new combination']
-#     # double_cpt = df_r['fields.relationship_type'].str.match('non-mechanical transformation') & df_r['fields.details.double or invertible counterpoint']
-#
-#
-#     rl_nmt_dict = {'Non-Mechanical Transformation Subtype':['sounding in different voices','melodically inverted', 'retrograde',
-#     'metrically shifted', 'transposed', 'new counter subject', 'old counter subject transposed', 'old counter subject shifted metrically'
-#     , 'new combination'],
-#                 'countrltypes': [
-#                     sound_diff.sum(),
-#                     melodically_inverted.sum(),
-#                     retrograde.sum(),
-#                     metrically_shifted.sum(),
-#                     transposed.sum(),
-#                     new_cs.sum(),
-#                     old_cs_tr.sum(),
-#                     old_cs_ms.sum(),
-#                     new_comb.sum(),
-#                     # diminution.sum(),
-#                     # augmentation.sum(),
-#                 ]}
-#     df_rl_nmt = pd.DataFrame(data=rl_nmt_dict)
-#     chart_rl_nmt = alt.Chart(df_rl_nmt).mark_bar().encode(
-#         x = 'countrltypes',
-#         y = 'Non-Mechanical Transformation Subtype',
-#     )
-#     text_rl_nmt = chart_rl_nmt.mark_text(
-#         align='left',
-#         baseline='middle',
-#         dx=3
-#     ).encode(
-#         text = 'countrltypes'
-#     )
-#     st.write(chart_rl_nmt+text_rl_nmt)
+    st.subheader("Download Relationship Data")
+    sa = st.text_input('Name of file for download (must include ".csv")')
+   ## Button to download CSV of results
+    if st.button('Download Complete Dataset as CSV'):
+       #s = st.text_input('Enter text here')
+       tmp_download_link = download_link(df, sa, 'Click here to download your data!')
+       st.markdown(tmp_download_link, unsafe_allow_html=True)
 
 
-# def get_rel_subtype_charts(selected_type, origdf):
-#     if selected_type.lower() == "Quotation":
-#         rt_selected = 'Quotation'
-#         rt_chosen = df_r['relationship_type'].str.match('Quotation')
-#         rt_full = origdf[rt_chosen]
-#         #separate rl type chart (2 types and counts of each)
-#         exact = df_r['relationship_type'].str.match('Quotation') & df_r['fields.quotation type'].str.match('exact')
-#         monnayage = df_r['relationship_type'].str.match('Quotation') & df_r['fields.quotation type'].str.match('monnayage')
-#         rl_q_dict = {'Quotation Type':['exact','monnayage'],
-#                     'countrltypes': [
-#                         exact.sum(),
-#                         monnayage.sum(),
-#                     ]}
-#         df_rl = pd.DataFrame(data=rl_q_dict)
-#         chart_rl = alt.Chart(df_rl).mark_bar().encode(
-#             x = 'countrltypes',
-#             y = 'Quotation Type',
-#         )
-#         text_rl = chart_rl.mark_text(
-#             align='left',
-#             baseline='middle',
-#             dx=3
-#         ).encode(
-#             text = 'countrltypes'
-#         )
-#         st.write(chart_rl+text_rl)
 
-# showall = st.checkbox('Show subtype charts for relationship data', value=False)
-# if showall:
-#     r_type_options = ['Quotation', 'Mechanical Transformation']
-#     r_selected_type = st.radio('', r_type_options, key = 'm')
-#     get_rel_subtype_charts(r_selected_type, df_r)
 
-# rt_frames = filter_by('relationship_type', 'df_r', 'select_data_r', 'e')
-# # rt_frames = filter_by('relationship_type', dpiece_sub, dpiece_full, 'e')
-# rt_full = rt_frames[0]
-# rt_sub = rt_frames[1]
-# st.markdown('Resulting relationships:')
-# #st.write(rt_full)
-# st.write(rt_sub)
 
-# st.subheader("Enter Relationship to View on CRIM Project")
+st.sidebar.header("Filter Relationships")
+if st.sidebar.checkbox('Show Filter Menus'):
+   st.sidebar.subheader("The order of filtering matters!")
+   st.sidebar.write("You can begin by selecting pieces first, then filter by relationship type; or the reverse.")
+   st.markdown("---")
 
-#     # view url via link
+   order = st.sidebar.radio("Select order to filter data: ", ('Piece > Relationship', 'Relationship > Piece'))
+   if (order == 'Piece > Relationship'):
+       # filter by pieces
+       st.sidebar.subheader("Select Model Piece")
+       mpiece_frames = filter_by("model", select_data_r, df_r_with_obs, 'c')
+       mpiece_full = mpiece_frames[0]
+       mpiece_sub = mpiece_frames[1]
 
-# prefix = "https://crimproject.org/relationships/"
-# int_val = st.text_input('Relationship Number')
-# combined = prefix + int_val
+       st.sidebar.subheader("Then Select Derivative Piece")
+       dpiece_frames = filter_by("derivative", mpiece_sub, mpiece_full, 'd')
+       dpiece_full = dpiece_frames[0]
+       dpiece_sub = dpiece_frames[1]
+       # st.write(dpiece_full)
 
-# st.markdown(combined, unsafe_allow_html=True)
+       st.sidebar.subheader("Then Select Relationship Type")
+       rt_frames = filter_by('relationship_type', dpiece_sub, dpiece_full, 's')
+       rt_full = rt_frames[0]
+       rt_sub = rt_frames[1]
+       st.subheader("Filtered Relationships")
+       st.write(rt_full)
 
-# st.subheader('Download Filtered Results as CSV')
-# userinput_r = st.text_input('Name of file for download (must include ".csv")', key='3')
-# if st.button('Download without type details', key='7'):
-#     download_csv(rt_sub, userinput_r)
-# st.write('or')
-# if st.button('Download with type details', key='8'):
-#     download_csv(rt_full, userinput_r)
+       #filter by type with or without pieces
+   else:
+       #filter by musical type
+       st.sidebar.subheader("Select Relationship Type")
+       rt_frames = filter_by('relationship_type', select_data_r, df_r_with_obs, 'x')
+       rt_full = rt_frames[0]
+       rt_sub = rt_frames[1]
+       # st.write(rt_full)
 
-# st.subheader("Graphical representation of result")
-# showrtype = st.checkbox('By relationship type', value=False)
-# # showmpiece = st.checkbox('By model observation piece', value=False)
-# # showdpiece = st.checkbox('By derivative observation piece', value=False)
-# if showrtype:
-#     draw_rt_chart(rt_full)
+       #filter by piece with or without musical type
+       st.sidebar.subheader("Then Select Model Piece")
+       mpiece_frames = filter_by('model', rt_sub, rt_full, 'w')
+       mpiece_full = mpiece_frames[0]
+       mpiece_sub = mpiece_frames[1]
+       # st.write(mpiece_sub)
 
-# if showmpiece:
-#     draw_chart("model", "countmpiece", rt_sub)
-# if showdpiece:
-#     draw_chart("derivative", "countdpiece", rt_sub)
-
-# else:
-#     #filter by musical type
-#     st.subheader("Relationship Type")
-#     rt_frames = filter_by('relationship_type', select_data_r, df_r, 'x')
-#     rt_full = rt_frames[0]
-#     rt_sub = rt_frames[1]
-#     #st.write(rt_full)
-
-#     #filter by piece with or without musical type
-#     st.subheader("Model Piece")
-#     mpiece_frames = filter_by('model', rt_sub, rt_full, 'w')
-#     mpiece_full = mpiece_frames[0]
-#     mpiece_sub = mpiece_frames[1]
-#     #st.write(mpiece_sub)
-
-#     st.subheader("Derivative Piece")
-#     dpiece_frames = filter_by('derivative', mpiece_sub, mpiece_full, 'v')
-#     dpiece_full = dpiece_frames[0]
-#     dpiece_sub = dpiece_frames[1]
-#     st.markdown('Resulting relationships:')
-#     st.write(dpiece_sub)
-
-    # view url via link
-
-# st.subheader("Enter Relationship to View on CRIM Project")
-
-# prefix = "https://crimproject.org/relationships/"
-# int_val = st.text_input('Relationship Number')
-# combined = prefix + int_val
-
-# st.markdown(combined, unsafe_allow_html=True)
-
-# st.subheader('Download Filtered Results as CSV')
-# userinput_r = st.text_input('Name of file for download (must include ".csv")', key='4')
-# if st.button('Download without type details', key='5'):
-#     download_csv(dpiece_sub, userinput_r)
-# st.write('or')
-# if st.button('Download with type details', key='6'):
-#     download_csv(dpiece_full, userinput_r)
-
-# st.subheader("Graphical representation of result")
-# showrtype = st.checkbox('By relationship type', value=False)
-# showmpiece = st.checkbox('By model observation piece', value=False)
-# showdpiece = st.checkbox('By derivative observation piece', value=False)
-# if showrtype:
-#     draw_rt_chart(dpiece_full)
-# if showmpiece:
-#     draw_chart("model", "countmpiece", dpiece_sub)
-# if showdpiece:
-#     draw_chart("derivative", "countdpiece", dpiece_sub)
+       st.sidebar.subheader("Then Select Derivative Piece")
+       dpiece_frames = filter_by('derivative', mpiece_sub, mpiece_full, 'v')
+       dpiece_full = dpiece_frames[0]
+       dpiece_sub = dpiece_frames[1]
+       st.subheader("Filtered Relationships")
+       st.write(dpiece_sub)
