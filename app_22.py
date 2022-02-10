@@ -1334,7 +1334,7 @@ if st.sidebar.checkbox('Select Relationship Tables and Charts'):
 
 
 
-st.sidebar.markdown("---")
+
 st.sidebar.header("Filter Relationships")
 if st.sidebar.checkbox('Show Filter Menus'):
    st.sidebar.subheader("The order of filtering matters!")
