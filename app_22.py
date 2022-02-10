@@ -411,35 +411,7 @@ df.rename(columns={'piece.piece_id':'piece_id',
                      'details.tenorizans': 'tenorizans staff',
 }, inplace=True)
 
-# df.rename(columns={'pk': 'id',
-#                     'fields.piece':'piece_id',
-#                     'fields.observer' : 'observer_name',
-#                     'fields.musical_type': 'musical_type',
-#                     'fields.details.entry intervals': 'entry_intervals',
-#                     'fields.details.time intervals': 'time_intervals',
-#                     'fields.details.periodic': 'periodic',
-#                     'fields.details.regularity': 'regularity',
-#                     'fields.details.sequential': 'sequential',
-#                     'fields.details.inverted': 'inverted',
-#                     'fields.details.retrograde': 'retrograde',
-#                     'fields.details.invertible counterpoint': 'invertible_counterpoint',
-#                     'fields.details.added entries': 'added_entries',
-#                     'fields.details.ostinato': 'ostinato',
-#                     'fields.details.type': 'type',
-#                     'fields.details.dialogue':  'hr_dialogue',
-#                      'fields.details.tone':  'cadence_tone',
-#                      'fields.details.irregular cadence': 'irreg_cadence',
-#                      'fields.details.features': 'features',
-#                      'fields.details.dovetail cadence':  'dovetail',
-#                      'fields.details.dovetail cadence voice':  'dovetail voice',
-#                      'fields.details.dovetail voice name': 'dovetail_voice',
-#                      'fields.details.dovetail position': 'dovetail_position',
-#                      'fields.details.irregular roles': 'irregular_roles',
-#                      'fields.details.cantizans': 'cantizans staff',
-#                      'fields.details.tenorizans': 'tenorizans staff',
-#
-#
-# }, inplace=True)
+
 drop_list = ['ema',
             'remarks',
             'curated',
@@ -466,37 +438,6 @@ drop_list = ['ema',
 
 
 
-
-#
-# 'fields.details.voice name',
-# 'fields.details.voice names',
-# 'fields.details.voice name reg',
-# 'fields.details.voice names reg',
-# 'fields.details.voice',
-# 'fields.details.voices',
-# 'fields.details.cantizans name',
-# 'fields.details.tenorizans name',
-# 'fields.details.cantizans name reg',
-# 'fields.details.tenorizans name reg',
-# 'fields.details.dovetail voice name reg',]
-#                      'fields.ema',
-#                      'fields.remarks',
-#                      'fields.curated',
-#                      'fields.created',
-#                      'fields.updated',
-#
-#                      'fields.details.voice name',
-#                      'fields.details.voice names',
-#                      'fields.details.voice name reg',
-#                      'fields.details.voice names reg',
-#                      'fields.details.voice',
-#                      'fields.details.voices',
-#                      'fields.details.cantizans name',
-#                      'fields.details.tenorizans name',
-#                      'fields.details.cantizans name reg',
-#                      'fields.details.tenorizans name reg',
-#                      'fields.details.dovetail voice name reg',
-#                      ]
 
 # df_clean = df.fillna("").drop(columns=drop_list)
 # df_clean = df.fillna("-").drop(columns=drop_list)
