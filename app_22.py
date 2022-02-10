@@ -378,58 +378,125 @@ def get_data(link):
     return df
 
 
-df = get_data('https://crimproject.org/observations/?format=json')
+df = get_data('https://crimproject.org/data/observations')
+# df = requests.get('http://crimproject.org/data/observations/').json()
 
 # df = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_observations.json')
-df.rename(columns={'pk': 'id',
-                    'fields.piece':'piece_id',
-                    'fields.observer' : 'observer_name',
-                    'fields.musical_type': 'musical_type',
-                    'fields.details.entry intervals': 'entry_intervals',
-                    'fields.details.time intervals': 'time_intervals',
-                    'fields.details.periodic': 'periodic',
-                    'fields.details.regularity': 'regularity',
-                    'fields.details.sequential': 'sequential',
-                    'fields.details.inverted': 'inverted',
-                    'fields.details.retrograde': 'retrograde',
-                    'fields.details.invertible counterpoint': 'invertible_counterpoint',
-                    'fields.details.added entries': 'added_entries',
-                    'fields.details.ostinato': 'ostinato',
-                    'fields.details.type': 'type',
-                    'fields.details.dialogue':  'hr_dialogue',
-                     'fields.details.tone':  'cadence_tone',
-                     'fields.details.irregular cadence': 'irreg_cadence',
-                     'fields.details.features': 'features',
-                     'fields.details.dovetail cadence':  'dovetail',
-                     'fields.details.dovetail cadence voice':  'dovetail voice',
-                     'fields.details.dovetail voice name': 'dovetail_voice',
-                     'fields.details.dovetail position': 'dovetail_position',
-                     'fields.details.irregular roles': 'irregular_roles',
-                     'fields.details.cantizans': 'cantizans staff',
-                     'fields.details.tenorizans': 'tenorizans staff',
-
-
+df.rename(columns={'piece.piece_id':'piece_id',
+                    'piece.full_title':'full_title',
+                    'observer.name' : 'observer_name',
+                    'details.entry intervals': 'entry_intervals',
+                    'details.time intervals': 'time_intervals',
+                    'details.voices': 'voices',
+                    'details.voice': 'voice',
+                    'details.periodic': 'periodic',
+                    'details.regularity': 'regularity',
+                    'details.sequential': 'sequential',
+                    'details.inverted': 'inverted',
+                    'details.retrograde': 'retrograde',
+                    'details.invertible counterpoint': 'invertible_counterpoint',
+                    'details.added entries': 'added_entries',
+                    'details.ostinato': 'ostinato',
+                    'details.type': 'type',
+                    'details.dialogue':  'hr_dialogue',
+                     'details.tone':  'cadence_tone',
+                     'details.irregular cadence': 'irreg_cadence',
+                     'details.features': 'features',
+                     'details.dovetail cadence':  'dovetail',
+                     'details.dovetail cadence voice':  'dovetail voice',
+                     'details.dovetail voice name': 'dovetail_voice',
+                     'details.dovetail position': 'dovetail_position',
+                     'details.irregular roles': 'irregular_roles',
+                     'details.cantizans': 'cantizans staff',
+                     'details.tenorizans': 'tenorizans staff',
 }, inplace=True)
-drop_list = ['model',
-                     'fields.definition',
-                     'fields.ema',
-                     'fields.remarks',
-                     'fields.curated',
-                     'fields.created',
-                     'fields.updated',
 
-                     'fields.details.voice name',
-                     'fields.details.voice names',
-                     'fields.details.voice name reg',
-                     'fields.details.voice names reg',
-                     'fields.details.voice',
-                     'fields.details.voices',
-                     'fields.details.cantizans name',
-                     'fields.details.tenorizans name',
-                     'fields.details.cantizans name reg',
-                     'fields.details.tenorizans name reg',
-                     'fields.details.dovetail voice name reg',
-                     ]
+# df.rename(columns={'pk': 'id',
+#                     'fields.piece':'piece_id',
+#                     'fields.observer' : 'observer_name',
+#                     'fields.musical_type': 'musical_type',
+#                     'fields.details.entry intervals': 'entry_intervals',
+#                     'fields.details.time intervals': 'time_intervals',
+#                     'fields.details.periodic': 'periodic',
+#                     'fields.details.regularity': 'regularity',
+#                     'fields.details.sequential': 'sequential',
+#                     'fields.details.inverted': 'inverted',
+#                     'fields.details.retrograde': 'retrograde',
+#                     'fields.details.invertible counterpoint': 'invertible_counterpoint',
+#                     'fields.details.added entries': 'added_entries',
+#                     'fields.details.ostinato': 'ostinato',
+#                     'fields.details.type': 'type',
+#                     'fields.details.dialogue':  'hr_dialogue',
+#                      'fields.details.tone':  'cadence_tone',
+#                      'fields.details.irregular cadence': 'irreg_cadence',
+#                      'fields.details.features': 'features',
+#                      'fields.details.dovetail cadence':  'dovetail',
+#                      'fields.details.dovetail cadence voice':  'dovetail voice',
+#                      'fields.details.dovetail voice name': 'dovetail_voice',
+#                      'fields.details.dovetail position': 'dovetail_position',
+#                      'fields.details.irregular roles': 'irregular_roles',
+#                      'fields.details.cantizans': 'cantizans staff',
+#                      'fields.details.tenorizans': 'tenorizans staff',
+#
+#
+# }, inplace=True)
+drop_list = ['ema',
+            'remarks',
+            'curated',
+            'created',
+            'updated',
+            'observer.url',
+            'piece.url',
+            'piece.mass',
+            'details.voice name',
+            'details.voice names',
+            'details.voice name reg',
+            'details.voice names reg',
+            'definition.url',
+            'definition.id',
+            'definition.observation_definition',
+            'details.cantizans name',
+            'details.tenorizans name',
+            'details.cantizans name reg',
+            'details.tenorizans name reg',
+            'details.dovetail voice name reg',
+            'details.altizans',
+            'details.bassizans',]
+
+
+
+
+
+#
+# 'fields.details.voice name',
+# 'fields.details.voice names',
+# 'fields.details.voice name reg',
+# 'fields.details.voice names reg',
+# 'fields.details.voice',
+# 'fields.details.voices',
+# 'fields.details.cantizans name',
+# 'fields.details.tenorizans name',
+# 'fields.details.cantizans name reg',
+# 'fields.details.tenorizans name reg',
+# 'fields.details.dovetail voice name reg',]
+#                      'fields.ema',
+#                      'fields.remarks',
+#                      'fields.curated',
+#                      'fields.created',
+#                      'fields.updated',
+#
+#                      'fields.details.voice name',
+#                      'fields.details.voice names',
+#                      'fields.details.voice name reg',
+#                      'fields.details.voice names reg',
+#                      'fields.details.voice',
+#                      'fields.details.voices',
+#                      'fields.details.cantizans name',
+#                      'fields.details.tenorizans name',
+#                      'fields.details.cantizans name reg',
+#                      'fields.details.tenorizans name reg',
+#                      'fields.details.dovetail voice name reg',
+#                      ]
 
 # df_clean = df.fillna("").drop(columns=drop_list)
 # df_clean = df.fillna("-").drop(columns=drop_list)
@@ -437,41 +504,90 @@ df_clean = df.drop(columns=drop_list)
 # add test
 
 # st.write(df_clean)
-df_r = get_data('https://crimproject.org/relationships/?format=json')
+df_r = get_data('https://crimproject.org/data/relationships')
+
+# df_r = requests.get('http://crimproject.org/data/relationships/').json()
 
 # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
-df_r.rename(columns={'pk': 'id',
-                    'fields.observer':'observer_name',
-                    'fields.relationship_type': 'relationship_type',
-                    'fields.model_observation': 'model_observation',
-                    'fields.derivative_observation': 'derivative_observation',
-                    'fields.details.type': 'type',
-                    'fields.details.self': 'self',
-                    'fields.details.activity': 'activity',
-                    'fields.details.extent': 'extent',
-                    'fields.details.new counter subject': 'new_countersubject',
-                    'fields.details.sounding in different voices': "sounding_diff_voices",
-                    'fields.details.whole passage transposed': 'whole_passage_transposed',
-                    'fields.details.whole passage metrically shifted': 'whole_passage_shifted',
-                    'fields.details.melodically inverted': 'melodically_inverted',
-                    'fields.details.retrograde': 'retrograde',
-                    'fields.details.double or invertible counterpoint': 'invertible_counterpoint',
-                    'fields.details.old counter subject shifted metrically': 'old_cs_shifted',
-                    'fields.details.old counter subject transposed': 'old_cs_transposed',
-                    'fields.details.new combination': 'new_combination',
-                    'fields.details.metrically shifted': 'metrically_shifted',
-                    'fields.details.transposition': 'transposition',
-                    'fields.details.systematic diminution': 'diminution',
-                    'fields.details.systematic augmentation': 'augmentation',
+df_r.rename(columns={
+                    'observer.name':'observer_name',
+                    'relationship_type': 'relationship_type',
+                    'model_observation.id': 'model_observation',
+                    'model_observation.piece.piece_id': 'model',
+                    'derivative_observation.id': 'derivative_observation',
+                    'derivative_observation.piece.piece_id': 'derivative',
+                    'details.type': 'type',
+                    'details.self': 'self',
+                    'details.activity': 'activity',
+                    'details.extent': 'extent',
+                    'details.new counter subject': 'new_countersubject',
+                    'details.sounding in different voices': "sounding_diff_voices",
+                    'details.whole passage transposed': 'whole_passage_transposed',
+                    'details.whole passage metrically shifted': 'whole_passage_shifted',
+                    'details.melodically inverted': 'melodically_inverted',
+                    'details.retrograde': 'retrograde',
+                    'details.double or invertible counterpoint': 'invertible_counterpoint',
+                    'details.old counter subject shifted metrically': 'old_cs_shifted',
+                    'details.old counter subject transposed': 'old_cs_transposed',
+                    'details.new combination': 'new_combination',
+                    'details.metrically shifted': 'metrically_shifted',
+                    'details.transposition': 'transposition',
+                    'details.systematic diminution': 'diminution',
+                    'details.systematic augmentation': 'augmentation',
                         }, inplace=True)
 
 
-r_drop_list = ['model',
-               'fields.definition',
-               'fields.curated',
-               'fields.created',
-               'fields.updated',
+# df_r.rename(columns={'pk': 'id',
+#                     'fields.observer':'observer_name',
+#                     'fields.relationship_type': 'relationship_type',
+#                     'fields.model_observation': 'model_observation',
+#                     'fields.derivative_observation': 'derivative_observation',
+#                     'fields.details.type': 'type',
+#                     'fields.details.self': 'self',
+#                     'fields.details.activity': 'activity',
+#                     'fields.details.extent': 'extent',
+#                     'fields.details.new counter subject': 'new_countersubject',
+#                     'fields.details.sounding in different voices': "sounding_diff_voices",
+#                     'fields.details.whole passage transposed': 'whole_passage_transposed',
+#                     'fields.details.whole passage metrically shifted': 'whole_passage_shifted',
+#                     'fields.details.melodically inverted': 'melodically_inverted',
+#                     'fields.details.retrograde': 'retrograde',
+#                     'fields.details.double or invertible counterpoint': 'invertible_counterpoint',
+#                     'fields.details.old counter subject shifted metrically': 'old_cs_shifted',
+#                     'fields.details.old counter subject transposed': 'old_cs_transposed',
+#                     'fields.details.new combination': 'new_combination',
+#                     'fields.details.metrically shifted': 'metrically_shifted',
+#                     'fields.details.transposition': 'transposition',
+#                     'fields.details.systematic diminution': 'diminution',
+#                     'fields.details.systematic augmentation': 'augmentation',
+#                         }, inplace=True)
+
+r_drop_list = ['musical_type',
+               'curated',
+               'created',
+               'updated',
+               'remarks',
+               'observer.url',
+               'observer',
+               'model_observation.url',
+               'model_observation.piece.url',
+               'model_observation.piece.full_title',
+               'model_observation.ema',
+               'derivative_observation.url',
+               'derivative_observation.piece.url',
+               'derivative_observation.piece.full_title',
+               'derivative_observation.ema',
+                'definition.url',
+                'definition.id',
+                'definition.relationship_definition',
                ]
+
+# r_drop_list = ['model',
+#                'fields.definition',
+#                'fields.curated',
+#                'fields.created',
+#                'fields.updated',
+#                ]
 df_r_clean = df_r.drop(columns=r_drop_list)
 # df_r_clean = df_r.fillna("-").drop(columns=r_drop_list)
 select_data = df[["id", "observer_name", "piece_id", "musical_type"]]
@@ -479,14 +595,14 @@ select_data = df[["id", "observer_name", "piece_id", "musical_type"]]
 #  adds piece_ids and musical_types back into relationship dataframe
 # first:  the relevant data from the obs df:
 df_short = df[['id', 'piece_id', 'musical_type']]
-
+#
 # now a pair of merges based on intersectino of obs ids in the two dfs:
 dfs_combined = pd.merge(df_r_clean,
                      df_short,
                      left_on='model_observation',
                      right_on='id',
                      how='outer')
-dfs_combined2 = pd.merge(dfs_combined ,
+dfs_combined2 = pd.merge(dfs_combined,
                      df_short,
                      left_on='derivative_observation',
                      right_on='id',
@@ -495,8 +611,6 @@ dfs_combined2 = pd.merge(dfs_combined ,
 dfs_combined2.drop(columns=['id', 'id_y'], inplace=True)
 # rename the new columns
 dfs_combined2.rename(columns={'id_x': 'id',
-                           'piece_id_x': "model",
-                           'piece_id_y': "derivative",
                            'musical_type_x': 'model_musical_type',
                            'musical_type_y': 'derivative_musical_type'}, inplace=True)
 df_r_with_obs = dfs_combined2
@@ -510,7 +624,17 @@ select_data_r = df_r_with_obs[['id',
                               'derivative',
                               'model_musical_type',
                               'derivative_musical_type',]]
-# just to test:
+
+# select_data_r = df_r_with_obs[['id',
+#                               'observer_name',
+#                               'relationship_type',
+#                               'model_observation',
+#                               'derivative_observation',
+#                               'model',
+#                               'derivative',
+#                               'model_musical_type',
+#                               'derivative_musical_type',]]
+# # just to test:
 # st.dataframe(select_data_r)
 
 
