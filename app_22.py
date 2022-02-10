@@ -954,6 +954,8 @@ if st.sidebar.checkbox('Select Observations'):
         st.subheader('Filtered Observations')
         st.write(piece_drop_cols)
 
+
+
         # st.sidebar.subheader("Then filter by person")
         # ps_frames = filter_by('observer_name', piece_sub, piece_full, 'y')
         # ps_full = ps_frames[0]
