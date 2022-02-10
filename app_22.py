@@ -432,7 +432,9 @@ drop_list = ['model',
                      ]
 
 df_clean = df.fillna("-").drop(columns=drop_list)
+# add test
 
+# st.write(df_clean)
 
 df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
 df_r.rename(columns={'pk': 'id',
