@@ -571,7 +571,7 @@ if st.sidebar.checkbox('Select Observations'):
 
     # from LINH
    order = st.sidebar.radio("Select order to filter data: ", ('Piece > Musical Type', 'Musical Type > Piece'))
-   if (order == 'Piece > Musical Types'):
+   if (order == 'Piece > Musical Type'):
         #filter by piece
         st.sidebar.subheader("Filter by piece")
         piece_frames = filter_by("piece_id", select_data, df, 'a')
