@@ -1313,7 +1313,7 @@ if st.sidebar.checkbox('Select Relationship Tables and Charts'):
           )
           st.write(chart_rl_nmt+text_rl_nmt)
 
-    st.sidebar.markdown("---")
+
 
     st.subheader("Enter Relationship to View on CRIM Project")
 
@@ -1322,7 +1322,6 @@ if st.sidebar.checkbox('Select Relationship Tables and Charts'):
     combined = prefix + int_val
 
     st.markdown(combined, unsafe_allow_html=True)
-    st.sidebar.markdown("---")
 
     st.subheader("Download Relationship Data")
     sa = st.text_input('Name of file for download (must include ".csv")')
@@ -1335,7 +1334,7 @@ if st.sidebar.checkbox('Select Relationship Tables and Charts'):
 
 
 
-
+st.sidebar.markdown("---")
 st.sidebar.header("Filter Relationships")
 if st.sidebar.checkbox('Show Filter Menus'):
    st.sidebar.subheader("The order of filtering matters!")
