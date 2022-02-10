@@ -431,8 +431,8 @@ drop_list = ['model',
                      'fields.details.dovetail voice name reg',
                      ]
 
-df_clean = df.fillna("").drop(columns=drop_list)
-# df_clean = df.fillna("-").drop(columns=drop_list)
+# df_clean = df.fillna("").drop(columns=drop_list)
+df_clean = df.fillna("-").drop(columns=drop_list)
 # add test
 
 # st.write(df_clean)
@@ -521,7 +521,7 @@ if st.sidebar.checkbox('Select Observation Tables and Charts'):
     st.header("Observations")
     if st.sidebar.checkbox('All Observation Metadata Fields'):
         st.subheader('All CRIM Observations with All Metadata')
-        st.write(df)
+        st.write(df_clean)
 
     if st.sidebar.checkbox('Observer, Piece, Musical Type'):
         st.subheader('Summary: Observer, Piece, Musical Type')
@@ -1161,7 +1161,7 @@ if st.sidebar.checkbox('Select Relationship Tables and Charts'):
     st.header("Relationships")
     if st.sidebar.checkbox('All Relationship Metadata Fields'):
         st.subheader('All Relationship Metadata Fields')
-        st.write(df_r)
+        st.write(df_r_clean)
 
     if st.sidebar.checkbox('Observer, Relationship Type, Model, Derivative'):
         st.subheader('Selected Metadata:  Observer, Relationship Type, Model Observation ID, Derivative Observation ID')
