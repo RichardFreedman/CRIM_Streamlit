@@ -651,9 +651,17 @@ if st.sidebar.checkbox('Select Observations'):
         mt_frames = filter_by('musical_type', piece_sub, piece_full, 'b')
         mt_full = mt_frames[0]
         mt_sub = mt_frames[1]
-        mt_drop_cols = mt_full.drop(columns=drop_list)
+        # mt_drop_cols = mt_full.drop(columns=drop_list)
         st.subheader("Filtered Observations")
         st.write(mt_drop_cols)
+
+        st.sidebar.subheader("Then filter by person")
+        ps_frames = filter_by('observer_name', mt_sub, mt_full, 'k')
+        ps_full = ps_frames[0]
+        ps_sub = ps_frames[1]
+        # ps_drop_cols = ps_full.drop(columns=drop_list)
+        st.subheader("Filtered Relationships")
+        st.write(ps_full)
 
         # st.sidebar.subheader("Then filter by person")
         # ps_frames = filter_by('observer_name', mt_sub, mt_full, 'y')
@@ -953,6 +961,8 @@ if st.sidebar.checkbox('Select Observations'):
         piece_drop_cols = piece_full.drop(columns=drop_list)
         st.subheader('Filtered Observations')
         st.write(piece_drop_cols)
+
+
 
         # st.sidebar.subheader("Then filter by person")
         # ps_frames = filter_by('observer_name', piece_sub, piece_full, 'y')
