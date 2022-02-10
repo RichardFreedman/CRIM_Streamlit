@@ -434,7 +434,7 @@ drop_list = ['model',
 df_clean = df.fillna("-").drop(columns=drop_list)
 # add test
 
-# st.write(df_clean)
+st.write(df_clean)
 
 df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
 df_r.rename(columns={'pk': 'id',
@@ -519,7 +519,7 @@ if st.sidebar.checkbox('Select Observation Tables and Charts'):
     st.header("Observations")
     if st.sidebar.checkbox('All Observation Metadata Fields'):
         st.subheader('All CRIM Observations with All Metadata')
-        st.write(df_clean)
+        st.write(df)
 
     if st.sidebar.checkbox('Observer, Piece, Musical Type'):
         st.subheader('Summary: Observer, Piece, Musical Type')
@@ -1159,7 +1159,7 @@ if st.sidebar.checkbox('Select Relationship Tables and Charts'):
     st.header("Relationships")
     if st.sidebar.checkbox('All Relationship Metadata Fields'):
         st.subheader('All Relationship Metadata Fields')
-        st.write(df_r_clean)
+        st.write(df_r)
 
     if st.sidebar.checkbox('Observer, Relationship Type, Model, Derivative'):
         st.subheader('Selected Metadata:  Observer, Relationship Type, Model Observation ID, Derivative Observation ID')
