@@ -1135,7 +1135,7 @@ if st.sidebar.checkbox('Select Observations'):
         st.subheader("Enter Observation to View on CRIM Project")
 
         prefix = "https://crimproject.org/observations/"
-        int_val = st.text_input('Observation Number')
+        int_val = st.text_input(' Observation Number')
         combined = prefix + int_val
 
         st.markdown(combined, unsafe_allow_html=True)
