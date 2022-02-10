@@ -652,16 +652,16 @@ if st.sidebar.checkbox('Select Observations'):
         mt_full = mt_frames[0]
         mt_sub = mt_frames[1]
         mt_drop_cols = mt_full.drop(columns=drop_list)
-        # st.subheader("Filtered Observations")
-        # st.write(mt_drop_cols)
-
-        st.sidebar.subheader("Then filter by person")
-        ps_frames = filter_by('observer_name', mt_sub, mt_full, 'y')
-        ps_full = ps_frames[0]
-        ps_sub = ps_frames[1]
-        ps_drop_cols = ps_full.drop(columns=drop_list)
         st.subheader("Filtered Observations")
-        st.write(ps_drop_cols)
+        st.write(mt_drop_cols)
+
+        # st.sidebar.subheader("Then filter by person")
+        # ps_frames = filter_by('observer_name', mt_sub, mt_full, 'y')
+        # ps_full = ps_frames[0]
+        # ps_sub = ps_frames[1]
+        # ps_drop_cols = ps_full.drop(columns=drop_list)
+        # st.subheader("Filtered Observations")
+        # st.write(ps_drop_cols)
         # st.write(mt_drop_cols)
 
         showfiltered = st.sidebar.checkbox('Show subtype charts for filtered results', value=False)
@@ -951,16 +951,16 @@ if st.sidebar.checkbox('Select Observations'):
         piece_full = piece_frames[0]
         piece_sub = piece_frames[1]
         piece_drop_cols = piece_full.drop(columns=drop_list)
-        # st.subheader('Filtered Observations')
-        # st.write(piece_drop_cols)
+        st.subheader('Filtered Observations')
+        st.write(piece_drop_cols)
 
-        st.sidebar.subheader("Then filter by person")
-        ps_frames = filter_by('observer_name', piece_sub, piece_full, 'y')
-        ps_full = ps_frames[0]
-        ps_sub = ps_frames[1]
-        ps_drop_cols = ps_full.drop(columns=drop_list)
-        st.subheader("Filtered Observations")
-        st.write(ps_drop_cols)
+        # st.sidebar.subheader("Then filter by person")
+        # ps_frames = filter_by('observer_name', piece_sub, piece_full, 'y')
+        # ps_full = ps_frames[0]
+        # ps_sub = ps_frames[1]
+        # ps_drop_cols = ps_full.drop(columns=drop_list)
+        # st.subheader("Filtered Observations")
+        # st.write(ps_drop_cols)
     # view url via link
         showfiltered = st.sidebar.checkbox('Show subtype charts for filtered results', value=False)
         if showfiltered:
