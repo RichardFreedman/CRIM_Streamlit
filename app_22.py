@@ -378,9 +378,9 @@ def get_data(link):
     return df
 
 
-# df = get_data('http://crimproject.org/data/observations/')
+df = get_data('https://crimproject.org/observations/?format=json')
 
-df = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_observations.json')
+# df = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_observations.json')
 df.rename(columns={'pk': 'id',
                     'fields.piece':'piece_id',
                     'fields.observer' : 'observer_name',
@@ -437,8 +437,9 @@ df_clean = df.drop(columns=drop_list)
 # add test
 
 # st.write(df_clean)
+df_r = get_data('https://crimproject.org/relationships/?format=json')
 
-df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
+# df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
 df_r.rename(columns={'pk': 'id',
                     'fields.observer':'observer_name',
                     'fields.relationship_type': 'relationship_type',
