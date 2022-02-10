@@ -431,7 +431,8 @@ drop_list = ['model',
                      'fields.details.dovetail voice name reg',
                      ]
 
-df_clean = df.fillna("-").drop(columns=drop_list)
+df_clean = df.fillna("").drop(columns=drop_list)
+# df_clean = df.fillna("-").drop(columns=drop_list)
 # add test
 
 # st.write(df_clean)
@@ -469,7 +470,8 @@ r_drop_list = ['model',
                'fields.created',
                'fields.updated',
                ]
-df_r_clean = df_r.fillna("-").drop(columns=r_drop_list)
+df_r_clean = df_r.fillna("").drop(columns=r_drop_list)
+# df_r_clean = df_r.fillna("-").drop(columns=r_drop_list)
 select_data = df[["id", "observer_name", "piece_id", "musical_type"]]
 
 #  adds piece_ids and musical_types back into relationship dataframe
