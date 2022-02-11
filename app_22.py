@@ -360,11 +360,7 @@ st.markdown(
 - Subtype tools display details as __charts__.
 - Want to view a given __observation__ or __relationship__ with notation and metadata?  Enter the given number as noted in the dialogue box.
 ''')
-# st.write("For __Observations__ you can begin with __Piece__ or __Musical Type__.")
-# st.write("For __Relationships__ you can begin with __Piece__ or __Relationship Type__.")
-# st.write("Subtype tools display __graphs and charts__ of data for each type and subtype in the CRIM Vocabularies")
 
-# st.write("Also see the [Relationship Metadata Viewer] (https://crim-relationship-data-viewer.herokuapp.com/)")
 
 # st.cache speeds things up by holding data in cache
 
@@ -379,6 +375,7 @@ def get_data(link):
 
 
 df = get_data('https://crimproject.org/data/observations')
+# df = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_data.json')
 # df = requests.get('http://crimproject.org/data/observations/').json()
 
 # df = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_observations.json')
@@ -407,19 +404,20 @@ df.rename(columns={'piece.piece_id':'piece_id',
                      # 'details.dovetail voice name': 'dovetail_voice',
                      'details.dovetail position': 'dovetail_position',
                      'details.irregular roles': 'irregular_roles',
+
                      # 'details.cantizans': 'cantizans staff',
                      # 'details.tenorizans': 'tenorizans staff',
-}, inplace=True)
+                    }, inplace=True)
 
-convert_dict = {'id': int,
-                # 'cantizans staff': int,
-                # 'tenorizans staff': int,
-               }
+# extract bar numbers from ema
 
-df = df.astype(convert_dict)
+df["measures"] = df['ema'].str.extract('(\d+-\d+)')
 
-drop_list = ['ema',
-            'remarks',
+
+
+drop_list = ['url',
+             'ema',
+             'remarks',
             'curated',
             'created',
             'updated',
@@ -445,23 +443,54 @@ drop_list = ['ema',
             # 'details.irregular roles'
             # 'details.dovetail cadence voice',
             'details.dovetail voice name',
+             'voice',
+             'details',
+             'full_title',
             ]
+df_clean = df.drop(columns=drop_list)
 
+col_order = ['id',
+ 'piece_id',
+ # 'full_title',
+ 'musical_type',
+ 'measures',
+ 'observer_name',
+ 'voices',
+ 'time_intervals',
+ 'entry_intervals',
+ 'added_entries',
+ 'regularity',
+ 'periodic',
+ 'inverted',
+ 'retrograde',
+ 'sequential',
+ 'invertible_counterpoint',
+ 'features',
+ 'ostinato',
+ 'type',
+ 'hr_dialogue',
+ 'cadence_tone',
+ 'irregular_roles',
+ 'dovetail',
+ 'dovetail_position',
+ 'irreg_cadence',
+ 'dovetail voice',
+ ]
 
-
-
+df_clean = df_clean.reindex(columns=col_order)
 
 # df_clean = df.fillna("").drop(columns=drop_list)
 # df_clean = df.fillna("-").drop(columns=drop_list)
-df_clean = df.drop(columns=drop_list)
+# df_clean = df.drop(columns=drop_list)
 # add test
 
 # st.write(df_clean)
 df_r = get_data('https://crimproject.org/data/relationships')
-
-# df_r = requests.get('http://crimproject.org/data/relationships/').json()
-
-# df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
+# df_r = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_rels.json')
+#
+# # df_r = requests.get('http://crimproject.org/data/relationships/').json()
+#
+# # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
 df_r.rename(columns={
                     'observer.name':'observer_name',
                     'relationship_type': 'relationship_type',
@@ -495,30 +524,30 @@ convert_dict_r = {'id': int,
 df = df.astype(convert_dict_r)
 
 
-# df_r.rename(columns={'pk': 'id',
-#                     'fields.observer':'observer_name',
-#                     'fields.relationship_type': 'relationship_type',
-#                     'fields.model_observation': 'model_observation',
-#                     'fields.derivative_observation': 'derivative_observation',
-#                     'fields.details.type': 'type',
-#                     'fields.details.self': 'self',
-#                     'fields.details.activity': 'activity',
-#                     'fields.details.extent': 'extent',
-#                     'fields.details.new counter subject': 'new_countersubject',
-#                     'fields.details.sounding in different voices': "sounding_diff_voices",
-#                     'fields.details.whole passage transposed': 'whole_passage_transposed',
-#                     'fields.details.whole passage metrically shifted': 'whole_passage_shifted',
-#                     'fields.details.melodically inverted': 'melodically_inverted',
-#                     'fields.details.retrograde': 'retrograde',
-#                     'fields.details.double or invertible counterpoint': 'invertible_counterpoint',
-#                     'fields.details.old counter subject shifted metrically': 'old_cs_shifted',
-#                     'fields.details.old counter subject transposed': 'old_cs_transposed',
-#                     'fields.details.new combination': 'new_combination',
-#                     'fields.details.metrically shifted': 'metrically_shifted',
-#                     'fields.details.transposition': 'transposition',
-#                     'fields.details.systematic diminution': 'diminution',
-#                     'fields.details.systematic augmentation': 'augmentation',
-#                         }, inplace=True)
+df_r.rename(columns={'pk': 'id',
+                    'fields.observer':'observer_name',
+                    'fields.relationship_type': 'relationship_type',
+                    'fields.model_observation': 'model_observation',
+                    'fields.derivative_observation': 'derivative_observation',
+                    'fields.details.type': 'type',
+                    'fields.details.self': 'self',
+                    'fields.details.activity': 'activity',
+                    'fields.details.extent': 'extent',
+                    'fields.details.new counter subject': 'new_countersubject',
+                    'fields.details.sounding in different voices': "sounding_diff_voices",
+                    'fields.details.whole passage transposed': 'whole_passage_transposed',
+                    'fields.details.whole passage metrically shifted': 'whole_passage_shifted',
+                    'fields.details.melodically inverted': 'melodically_inverted',
+                    'fields.details.retrograde': 'retrograde',
+                    'fields.details.double or invertible counterpoint': 'invertible_counterpoint',
+                    'fields.details.old counter subject shifted metrically': 'old_cs_shifted',
+                    'fields.details.old counter subject transposed': 'old_cs_transposed',
+                    'fields.details.new combination': 'new_combination',
+                    'fields.details.metrically shifted': 'metrically_shifted',
+                    'fields.details.transposition': 'transposition',
+                    'fields.details.systematic diminution': 'diminution',
+                    'fields.details.systematic augmentation': 'augmentation',
+                        }, inplace=True)
 
 r_drop_list = ['musical_type',
                'curated',
@@ -605,7 +634,7 @@ if st.sidebar.checkbox('Select Observation Tables and Charts'):
     st.header("Observations")
     if st.sidebar.checkbox('All Observation Metadata Fields'):
         st.subheader('All CRIM Observations with All Metadata')
-        st.write(df)
+        st.write(df_clean)
 
     if st.sidebar.checkbox('Observer, Piece, Musical Type'):
         st.subheader('Summary: Observer, Piece, Musical Type')
