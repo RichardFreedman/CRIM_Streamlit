@@ -641,7 +641,7 @@ if st.sidebar.checkbox('Select Observations'):
         #filter by piece
         st.sidebar.subheader("Filter by piece")
         pieceo_frames = filter_by("piece_id", select_data, df, 'a')
-        pieceo_full = pieceo_full_frames[0]
+        pieceo_full = pieceo_frames[0]
         pieceo_sub = pieceo_frames[1]
         #st.write(piece_full)
         #st.write(piece_sub)
