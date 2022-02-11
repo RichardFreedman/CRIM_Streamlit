@@ -640,7 +640,8 @@ if st.sidebar.checkbox('Select Observations'):
    if (order == 'Piece > Musical Type'):
         #filter by piece
         st.sidebar.subheader("Filter by piece")
-        pieceo_frames = filter_by("piece_id", select_data, df, 'a')
+        # pieceo_frames = filter_by("piece_id", select_data, df, 'a')
+        pieceo_frames = filter_by("piece_id", select_data, df_clean, 'a')
         pieceo_full = pieceo_frames[0]
         pieceo_sub = pieceo_frames[1]
         #st.write(piece_full)
@@ -948,7 +949,8 @@ if st.sidebar.checkbox('Select Observations'):
     #filter by type with or without piece
 
         st.sidebar.subheader("Filter by Musical Type")
-        mto_frames = filter_by('musical_type', select_data, df, 'd')
+        mto_frames = filter_by('musical_type', select_data, df_clean, 'd')
+        # mto_frames = filter_by('musical_type', select_data, df, 'd')
         mto_full = mto_frames[0]
         mto_sub = mto_frames[1]
         #st.write(mt_full)
