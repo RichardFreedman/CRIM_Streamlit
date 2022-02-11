@@ -653,15 +653,15 @@ if st.sidebar.checkbox('Select Observations'):
         mto_sub = mto_frames[1]
         # mt_drop_cols = mt_full.drop(columns=drop_list)
         # st.subheader("Filtered Observations")
-        # st.write(mt_drop_cols)
+        st.write(mto_full)
 
-        st.sidebar.subheader("Then filter by person")
-        pso_frames = filter_by('observer_name', mto_sub, mto_full, 'k')
-        pso_full = pso_frames[0]
-        pso_sub = pso_frames[1]
-        # ps_drop_cols = ps_full.drop(columns=drop_list)
-        st.subheader("Filtered Observations")
-        st.write(pso_full)
+        # st.sidebar.subheader("Then filter by person")
+        # pso_frames = filter_by('observer_name', mto_sub, mto_full, 'k')
+        # pso_full = pso_frames[0]
+        # pso_sub = pso_frames[1]
+        # # ps_drop_cols = ps_full.drop(columns=drop_list)
+        # st.subheader("Filtered Observations")
+        # st.write(pso_sub)
 
         # st.sidebar.subheader("Then filter by person")
         # ps_frames = filter_by('observer_name', mt_sub, mt_full, 'y')
