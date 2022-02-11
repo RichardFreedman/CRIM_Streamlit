@@ -660,7 +660,7 @@ if st.sidebar.checkbox('Select Observations'):
         pso_full = pso_frames[0]
         pso_sub = pso_frames[1]
         # ps_drop_cols = ps_full.drop(columns=drop_list)
-        st.subheader("Filtered Relationships")
+        st.subheader("Filtered Observations")
         st.write(pso_full)
 
         # st.sidebar.subheader("Then filter by person")
@@ -1437,17 +1437,17 @@ if st.sidebar.checkbox('Show Filter Menus'):
        # filter by pieces
        st.sidebar.subheader("Select Model Piece")
        mpiece_frames = filter_by("model", select_data_r, df_r_with_obs, 'c')
-       mpiece_full = mpiecer_sub_frames[0]
-       mpiecer_sub = mpiecer_frames[1]
+       mpiece_full = mpiece_frames[0]
+       mpiece_sub = mpiece_frames[1]
 
        st.sidebar.subheader("Then Select Derivative Piece")
-       dpiece_frames = filter_by("derivative", mpiece_sub, mpiecerfull, 'd')
+       dpiece_frames = filter_by("derivative", mpiece_sub, mpiece_full, 'd')
        dpiece_full = dpiece_frames[0]
        dpiece_sub = dpiece_frames[1]
        # st.write(dpiece_full)
 
        st.sidebar.subheader("Then Select Relationship Type")
-       rt_frames = filter_by('relationship_type', dpiecer_sub, dpiecer_full, 's')
+       rt_frames = filter_by('relationship_type', dpiece_sub, dpiece_full, 's')
        rt_full = rt_frames[0]
        rt_sub = rt_frames[1]
        # st.subheader("Filtered Relationships")
