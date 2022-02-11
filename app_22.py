@@ -407,10 +407,16 @@ df.rename(columns={'piece.piece_id':'piece_id',
                      'details.dovetail voice name': 'dovetail_voice',
                      'details.dovetail position': 'dovetail_position',
                      'details.irregular roles': 'irregular_roles',
-                     'details.cantizans': 'cantizans staff',
-                     'details.tenorizans': 'tenorizans staff',
+                     # 'details.cantizans': 'cantizans staff',
+                     # 'details.tenorizans': 'tenorizans staff',
 }, inplace=True)
 
+convert_dict = {'id': int,
+                # 'cantizans staff': int,
+                # 'tenorizans staff': int,
+               }
+
+df = df.astype(convert_dict)
 
 drop_list = ['ema',
             'remarks',
@@ -476,6 +482,11 @@ df_r.rename(columns={
                     'details.systematic diminution': 'diminution',
                     'details.systematic augmentation': 'augmentation',
                         }, inplace=True)
+
+convert_dict_r = {'id': int,
+               }
+
+df = df.astype(convert_dict_r)
 
 
 # df_r.rename(columns={'pk': 'id',
