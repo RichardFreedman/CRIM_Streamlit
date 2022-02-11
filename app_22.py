@@ -439,7 +439,10 @@ drop_list = ['ema',
             'details.tenorizans name reg',
             'details.dovetail voice name reg',
             'details.altizans',
-            'details.bassizans',]
+            'details.bassizans',
+            'details.cantizans',
+            'details.tenorizans',
+            ]
 
 
 
