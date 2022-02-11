@@ -640,28 +640,28 @@ if st.sidebar.checkbox('Select Observations'):
    if (order == 'Piece > Musical Type'):
         #filter by piece
         st.sidebar.subheader("Filter by piece")
-        piece_frames = filter_by("piece_id", select_data, df, 'a')
-        piece_full = piece_frames[0]
-        piece_sub = piece_frames[1]
+        pieceo_frames = filter_by("piece_id", select_data, df, 'a')
+        pieceo_full = pieceo_full_frames[0]
+        pieceo_sub = pieceo_frames[1]
         #st.write(piece_full)
         #st.write(piece_sub)
 
         #filter by type with or without piece
         st.sidebar.subheader("Then filter by musical type")
-        mt_frames = filter_by('musical_type', piece_sub, piece_full, 'b')
-        mt_full = mt_frames[0]
-        mt_sub = mt_frames[1]
+        mto_frames = filter_by('musical_type', pieceo_sub, pieceo_full, 'b')
+        mto_full = mto_frames[0]
+        mto_sub = mto_frames[1]
         # mt_drop_cols = mt_full.drop(columns=drop_list)
-        st.subheader("Filtered Observations")
-        st.write(mt_drop_cols)
+        # st.subheader("Filtered Observations")
+        # st.write(mt_drop_cols)
 
         st.sidebar.subheader("Then filter by person")
-        ps_frames = filter_by('observer_name', mt_sub, mt_full, 'k')
-        ps_full = ps_frames[0]
-        ps_sub = ps_frames[1]
+        pso_frames = filter_by('observer_name', mto_sub, mto_full, 'k')
+        pso_full = ps_frames[0]
+        pso_sub = ps_frames[1]
         # ps_drop_cols = ps_full.drop(columns=drop_list)
         st.subheader("Filtered Relationships")
-        st.write(ps_full)
+        st.write(pso_full)
 
         # st.sidebar.subheader("Then filter by person")
         # ps_frames = filter_by('observer_name', mt_sub, mt_full, 'y')
@@ -948,29 +948,28 @@ if st.sidebar.checkbox('Select Observations'):
     #filter by type with or without piece
 
         st.sidebar.subheader("Filter by Musical Type")
-        mt_frames = filter_by('musical_type', select_data, df, 'z')
-        mt_full = mt_frames[0]
-        mt_sub = mt_frames[1]
+        mto_frames = filter_by('musical_type', select_data, df, 'z')
+        mto_full = mto_frames[0]
+        mto_sub = mto_frames[1]
         #st.write(mt_full)
 
         #filter by piece with or without musical type
         st.sidebar.subheader("Then Filter by Piece")
-        piece_frames = filter_by('piece_id', mt_sub, mt_full, 'y')
-        piece_full = piece_frames[0]
-        piece_sub = piece_frames[1]
-        piece_drop_cols = piece_full.drop(columns=drop_list)
-        st.subheader('Filtered Observations')
-        st.write(piece_drop_cols)
+        pieceo_frames = filter_by('piece_id', mto_sub, mto_full, 'y')
+        pieceo_full = pieceo_frames[0]
+        pieceo_sub = pieceo_frames[1]
+        # piece_drop_cols = piece_full.drop(columns=drop_list)
+        # st.subheader('Filtered Observations')
+        # st.write(piece_drop_cols)
 
+        st.sidebar.subheader("Then filter by person")
+        pso_frames = filter_by('observer_name', pieceo_sub, pieceo_full, 'y')
+        pso_full = pso_frames[0]
+        pso_sub = pso_frames[1]
 
-
-        # st.sidebar.subheader("Then filter by person")
-        # ps_frames = filter_by('observer_name', piece_sub, piece_full, 'y')
-        # ps_full = ps_frames[0]
-        # ps_sub = ps_frames[1]
         # ps_drop_cols = ps_full.drop(columns=drop_list)
-        # st.subheader("Filtered Observations")
-        # st.write(ps_drop_cols)
+        st.subheader("Filtered Observations")
+        st.write(pso_full)
     # view url via link
         showfiltered = st.sidebar.checkbox('Show subtype charts for filtered results', value=False)
         if showfiltered:
@@ -1438,17 +1437,17 @@ if st.sidebar.checkbox('Show Filter Menus'):
        # filter by pieces
        st.sidebar.subheader("Select Model Piece")
        mpiece_frames = filter_by("model", select_data_r, df_r_with_obs, 'c')
-       mpiece_full = mpiece_frames[0]
-       mpiece_sub = mpiece_frames[1]
+       mpiece_full = mpiecer_sub_frames[0]
+       mpiecer_sub = mpiecer_frames[1]
 
        st.sidebar.subheader("Then Select Derivative Piece")
-       dpiece_frames = filter_by("derivative", mpiece_sub, mpiece_full, 'd')
+       dpiece_frames = filter_by("derivative", mpiece_sub, mpiecerfull, 'd')
        dpiece_full = dpiece_frames[0]
        dpiece_sub = dpiece_frames[1]
        # st.write(dpiece_full)
 
        st.sidebar.subheader("Then Select Relationship Type")
-       rt_frames = filter_by('relationship_type', dpiece_sub, dpiece_full, 's')
+       rt_frames = filter_by('relationship_type', dpiecer_sub, dpiecer_full, 's')
        rt_full = rt_frames[0]
        rt_sub = rt_frames[1]
        # st.subheader("Filtered Relationships")
@@ -1483,4 +1482,4 @@ if st.sidebar.checkbox('Show Filter Menus'):
        dpiece_full = dpiece_frames[0]
        dpiece_sub = dpiece_frames[1]
        st.subheader("Filtered Relationships")
-       st.write(dpiece_sub)
+       st.write(dpiece_full)
