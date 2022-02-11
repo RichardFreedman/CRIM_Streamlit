@@ -406,7 +406,7 @@ df.rename(columns={'piece.piece_id':'piece_id',
                      'details.dovetail cadence voice':  'dovetail voice',
                      'details.dovetail voice name': 'dovetail_voice',
                      'details.dovetail position': 'dovetail_position',
-                     'details.irregular roles': 'irregular_roles',
+                     # 'details.irregular roles': 'irregular_roles',
                      # 'details.cantizans': 'cantizans staff',
                      # 'details.tenorizans': 'tenorizans staff',
 }, inplace=True)
@@ -442,6 +442,7 @@ drop_list = ['ema',
             'details.bassizans',
             'details.cantizans',
             'details.tenorizans',
+            'details.irregular roles',
             ]
 
 
