@@ -657,8 +657,8 @@ if st.sidebar.checkbox('Select Observations'):
 
         st.sidebar.subheader("Then filter by person")
         pso_frames = filter_by('observer_name', mto_sub, mto_full, 'k')
-        pso_full = ps_frames[0]
-        pso_sub = ps_frames[1]
+        pso_full = pso_frames[0]
+        pso_sub = pso_frames[1]
         # ps_drop_cols = ps_full.drop(columns=drop_list)
         st.subheader("Filtered Relationships")
         st.write(pso_full)
