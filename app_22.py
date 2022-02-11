@@ -605,7 +605,7 @@ if st.sidebar.checkbox('Select Observation Tables and Charts'):
     st.header("Observations")
     if st.sidebar.checkbox('All Observation Metadata Fields'):
         st.subheader('All CRIM Observations with All Metadata')
-        st.write(df_clean)
+        st.write(df)
 
     if st.sidebar.checkbox('Observer, Piece, Musical Type'):
         st.subheader('Summary: Observer, Piece, Musical Type')
