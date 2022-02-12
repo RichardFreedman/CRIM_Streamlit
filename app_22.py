@@ -479,17 +479,12 @@ col_order = ['id',
 
 df_clean = df_clean.reindex(columns=col_order)
 
-# df_clean = df.fillna("").drop(columns=drop_list)
-# df_clean = df.fillna("-").drop(columns=drop_list)
-# df_clean = df.drop(columns=drop_list)
-# add test
+
 
 # st.write(df_clean)
 df_r = get_data('https://crimproject.org/data/relationships')
-# df_r = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_rels.json')
-#
-# # df_r = requests.get('http://crimproject.org/data/relationships/').json()
-#
+
+
 # # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
 df_r.rename(columns={
                     'observer.name':'observer_name',
@@ -569,14 +564,9 @@ r_drop_list = ['musical_type',
                 'definition.relationship_definition',
                ]
 
-# r_drop_list = ['model',
-#                'fields.definition',
-#                'fields.curated',
-#                'fields.created',
-#                'fields.updated',
-#                ]
+
 df_r_clean = df_r.drop(columns=r_drop_list)
-# df_r_clean = df_r.fillna("-").drop(columns=r_drop_list)
+
 select_data = df[["id", "observer_name", "piece_id", "musical_type"]]
 
 #  adds piece_ids and musical_types back into relationship dataframe
@@ -611,18 +601,6 @@ select_data_r = df_r_with_obs[['id',
                               'derivative',
                               'model_musical_type',
                               'derivative_musical_type',]]
-
-# select_data_r = df_r_with_obs[['id',
-#                               'observer_name',
-#                               'relationship_type',
-#                               'model_observation',
-#                               'derivative_observation',
-#                               'model',
-#                               'derivative',
-#                               'model_musical_type',
-#                               'derivative_musical_type',]]
-# # just to test:
-# st.dataframe(select_data_r)
 
 
 # Sidebar options for _all_ data of a particular type
@@ -700,24 +678,16 @@ if st.sidebar.checkbox('Select Observations'):
         mto_sub = mto_frames[1]
         # mt_drop_cols = mt_full.drop(columns=drop_list)
         # st.subheader("Filtered Observations")
-        st.write(mto_full)
+        # st.write(mto_full)
 
-        # st.sidebar.subheader("Then filter by person")
-        # pso_frames = filter_by('observer_name', mto_sub, mto_full, 'c')
-        # pso_full = pso_frames[0]
-        # pso_sub = pso_frames[1]
-        # # ps_drop_cols = ps_full.drop(columns=drop_list)
-        # st.subheader("Filtered Observations")
-        # st.write(pso_sub)
-
-        # st.sidebar.subheader("Then filter by person")
-        # ps_frames = filter_by('observer_name', mt_sub, mt_full, 'y')
-        # ps_full = ps_frames[0]
-        # ps_sub = ps_frames[1]
+        st.sidebar.subheader("Then filter by person")
+        pso_frames = filter_by('observer_name', mto_sub, mto_full, 'c')
+        pso_full = pso_frames[0]
+        pso_sub = pso_frames[1]
         # ps_drop_cols = ps_full.drop(columns=drop_list)
-        # st.subheader("Filtered Observations")
-        # st.write(ps_drop_cols)
-        # st.write(mt_drop_cols)
+        st.subheader("Filtered Observations")
+        st.write(pso_sub)
+
 
         showfiltered = st.sidebar.checkbox('Show subtype charts for filtered results', value=False)
         if showfiltered:
