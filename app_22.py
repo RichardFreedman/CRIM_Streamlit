@@ -1348,8 +1348,8 @@ if st.sidebar.checkbox('Select Relationship Tables and Charts'):
       if st.checkbox('Quotation Types'):
           st.subheader("Quotation Types")
           # Quotation Chart
-          exact = df_r['fields.details.type'].str.match('exact')
-          monnayage = df_r['fields.details.type'].str.match('monnayage')
+          exact = df_r['type'].str.match('exact')
+          monnayage = df_r['type'].str.match('monnayage')
           rl_q_dict = {'Quotation Subtype':['exact','monnayage'],
                       'countrltypes': [
                           exact.sum(),
@@ -1514,6 +1514,14 @@ if st.sidebar.checkbox('Show Filter Menus'):
        st.subheader("Filtered Relationships")
        st.write(ps_full)
 
+       st.subheader("Enter Relationship to View on CRIM Project")
+
+       prefix = "https://crimproject.org/relationships/"
+       int_val = st.text_input('Relationship Number')
+       combined = prefix + int_val
+
+       st.markdown(combined, unsafe_allow_html=True)
+
       # downloaded
        st.subheader('Download Filtered Relationships as CSV')
        userinput = st.text_input('Name of file for download (must include ".csv")', key='y')
@@ -1543,7 +1551,7 @@ if st.sidebar.checkbox('Show Filter Menus'):
        dpiece_frames = filter_by('derivative', mpiece_sub, mpiece_full, 'q')
        dpiece_full = dpiece_frames[0]
        dpiece_sub = dpiece_frames[1]
-       st.subheader("Filtered Relationships")
+       # st.subheader("Filtered Relationships")
        # st.write(dpiece_full)
 
        st.sidebar.subheader("Then filter by person")
@@ -1553,6 +1561,14 @@ if st.sidebar.checkbox('Show Filter Menus'):
        # ps_drop_cols = ps_full.drop(columns=drop_list)
        st.subheader("Filtered Relationships")
        st.write(ps_full)
+
+       st.subheader("Enter Relationship to View on CRIM Project")
+
+       prefix = "https://crimproject.org/relationships/"
+       int_val = st.text_input('Relationship Number')
+       combined = prefix + int_val
+
+       st.markdown(combined, unsafe_allow_html=True)
 
        st.subheader('Download Filtered Relationships as CSV')
        userinput = st.text_input('Name of file for download (must include ".csv")', key='s')
