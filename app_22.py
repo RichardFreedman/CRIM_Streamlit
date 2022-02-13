@@ -567,7 +567,7 @@ r_drop_list = ['musical_type',
 
 df_r_clean = df_r.drop(columns=r_drop_list)
 
-select_data = df[["id", "observer_name", "piece_id", "musical_type"]]
+select_data = df[["id", "observer_name", "piece_id", "musical_type", 'measures']]
 
 #  adds piece_ids and musical_types back into relationship dataframe
 # first:  the relevant data from the obs df:
