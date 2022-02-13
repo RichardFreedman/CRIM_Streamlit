@@ -727,12 +727,12 @@ if st.sidebar.checkbox('Select Observations'):
         showfiltered = st.sidebar.checkbox('Show subtype charts for filtered results', value=False)
         if showfiltered:
 # Cantus firmus chart_rt
-            if mt_sub['musical_type'].isin(['cantus firmus']).any():
+            if mto_sub['musical_type'].isin(['cantus firmus']).any():
                cf_dict = {'Subtypes':['both pitches and durations', 'pitches only', 'durations only'],
                'count': [
-                    mt_full['features'].isin(['both pitches and durations']).sum(),
-                    mt_full['features'].isin(['pitches only']).sum(),
-                    mt_full['features'].isin(['durations only']).sum(),
+                    pso_full['features'].isin(['both pitches and durations']).sum(),
+                    pso_full['features'].isin(['pitches only']).sum(),
+                    pso_full['features'].isin(['durations only']).sum(),
                ]}
                df_cf = pd.DataFrame(data=cf_dict)
                chart_cf = alt.Chart(df_cf).mark_bar().encode(
@@ -749,12 +749,12 @@ if st.sidebar.checkbox('Select Observations'):
                st.write("Cantus Firmus Subtypes from Filtered View Above")
                st.write(chart_cf+text_cf)
 # Soggetto chart_rt
-            if mt_sub['musical_type'].isin(['soggetto']).any():
+            if mto_sub['musical_type'].isin(['soggetto']).any():
                sg_dict = {'Subtypes':['both pitches and durations', 'pitches only', 'durations only'],
                'count': [
-                    mt_full['features'].isin(['both pitches and durations']).sum(),
-                    mt_full['features'].isin(['pitches only']).sum(),
-                    mt_full['features'].isin(['durations only']).sum(),
+                    pso_full['features'].isin(['both pitches and durations']).sum(),
+                    pso_full['features'].isin(['pitches only']).sum(),
+                    pso_full['features'].isin(['durations only']).sum(),
                ]}
                df_sg = pd.DataFrame(data=sg_dict)
                chart_sg = alt.Chart(df_sg).mark_bar().encode(
@@ -771,12 +771,12 @@ if st.sidebar.checkbox('Select Observations'):
                st.write("Soggetto Subtypes from Filtered View Above")
                st.write(chart_sg+text_sg)
 # C Soggetto chart_rt
-            if mt_sub['musical_type'].isin(['counter soggetto']).any():
+            if mto_sub['musical_type'].isin(['counter soggetto']).any():
                csg_dict = {'Subtypes':['both pitches and durations', 'pitches only', 'durations only'],
                'count': [
-                    mt_full['features'].isin(['both pitches and durations']).sum(),
-                    mt_full['features'].isin(['pitches only']).sum(),
-                    mt_full['features'].isin(['durations only']).sum(),
+                    pso_full['features'].isin(['both pitches and durations']).sum(),
+                    pso_full['features'].isin(['pitches only']).sum(),
+                    pso_full['features'].isin(['durations only']).sum(),
                ]}
                df_csg = pd.DataFrame(data=csg_dict)
                chart_csg = alt.Chart(df_csg).mark_bar().encode(
@@ -793,10 +793,10 @@ if st.sidebar.checkbox('Select Observations'):
                st.write("Soggetto Subtypes from Filtered View Above")
                st.write(chart_csg+text_csg)
 # Contrapuntal Duo chart_rt
-            if mt_sub['musical_type'].isin(['contrapuntal duo']).any():
+            if mto_sub['musical_type'].isin(['contrapuntal duo']).any():
                cd_dict = {'Subtypes':['contrapuntal duos'],
                'count': [
-                    mt_full['musical_type'].isin(['contrapuntal duo']).sum(),
+                    pso_full['musical_type'].isin(['contrapuntal duo']).sum(),
 
                ]}
                df_cd = pd.DataFrame(data=cd_dict)
@@ -814,13 +814,13 @@ if st.sidebar.checkbox('Select Observations'):
                st.write("Soggetto Subtypes from Filtered View Above")
                st.write(chart_cd+text_cd)
 # FUGA Chart
-            if mt_sub['musical_type'].isin(['fuga']).any():
+            if mto_sub['musical_type'].isin(['fuga']).any():
                 fg_dict = {'Subtypes':['periodic', 'sequential', 'inverted', 'retrograde'],
                 'count': [
-                    mt_full['periodic'].sum(),
-                    mt_full['sequential'].sum(),
-                    mt_full['inverted'].sum(),
-                    mt_full['retrograde'].sum(),
+                    pso_full['periodic'].sum(),
+                    pso_full['sequential'].sum(),
+                    pso_full['inverted'].sum(),
+                    pso_full['retrograde'].sum(),
                 ]}
                 df_fg = pd.DataFrame(data=fg_dict)
                 chart_fg = alt.Chart(df_fg).mark_bar().encode(
@@ -837,12 +837,12 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Fuga Subtypes from Filtered View Above")
                 st.write(chart_fg+text_fg)
 # PEN chart
-            if mt_sub['musical_type'].isin(['periodic entry']).any():
+            if mto_sub['musical_type'].isin(['periodic entry']).any():
                 pe_dict = {'Subtypes':['sequential', 'invertible counterpoint', 'added entries'],
                             'count': [
-                                mt_full['sequential'].sum(),
-                                mt_full['invertible_counterpoint'].sum(),
-                                mt_full['added_entries'].sum(),
+                                pso_full['sequential'].sum(),
+                                pso_full['invertible_counterpoint'].sum(),
+                                pso_full['added_entries'].sum(),
                             ]}
                 df_pe = pd.DataFrame(data=pe_dict)
                 chart_pe = alt.Chart(df_pe).mark_bar().encode(
@@ -859,12 +859,12 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Periodic Entry Subtypes from Filtered View Above")
                 st.write(chart_pe+text_pe)
 # ID Subtypes
-            if mt_sub['musical_type'].isin(['imitative duo']).any():
+            if mto_sub['musical_type'].isin(['imitative duo']).any():
 
                 id_dict = {'Subtypes':['invertible counterpoint', 'added entries'],
                             'count': [
-                                mt_full['invertible_counterpoint'].sum(),
-                                mt_full['added_entries'].sum(),
+                                pso_full['invertible_counterpoint'].sum(),
+                                pso_full['added_entries'].sum(),
                             ]}
                 df_id = pd.DataFrame(data=id_dict)
                 chart_id = alt.Chart(df_id).mark_bar().encode(
@@ -882,13 +882,13 @@ if st.sidebar.checkbox('Select Observations'):
 
                 st.write(chart_id+text_id)
 # NIM here
-            if mt_sub['musical_type'].isin(['non-imitative duo']).any():
+            if mto_sub['musical_type'].isin(['non-imitative duo']).any():
 
                 nim_dict = {'Subtypes':['sequential', 'invertible counterpoint', 'added entries'],
                             'count': [
-                                mt_full['sequential'].sum(),
-                                mt_full['invertible_counterpoint'].sum(),
-                                mt_full['added_entries'].sum(),
+                                pso_full['sequential'].sum(),
+                                pso_full['invertible_counterpoint'].sum(),
+                                pso_full['added_entries'].sum(),
                             ]}
                 df_nim = pd.DataFrame(data=nim_dict)
                 chart_nim = alt.Chart(df_nim).mark_bar().encode(
@@ -905,13 +905,13 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Non-Imitative Duo Subtypes from Filtered View Above")
                 st.write(chart_nim+text_nim)
 # HR Here
-            if mt_sub['musical_type'].isin(['homorhythm']).any():
+            if mto_sub['musical_type'].isin(['homorhythm']).any():
                 hr_dict = {'Subtypes':['simple', 'staggered', 'sequential', 'fauxbourdon'],
                             'count': [
-                                mt_full['type'].isin(['simple']).sum(),
-                                mt_full['type'].isin(['staggered']).sum(),
-                                mt_full['type'].isin(['sequential']).sum(),
-                                mt_full['type'].isin(['fauxbourdon']).sum(),
+                                pso_full['type'].isin(['simple']).sum(),
+                                pso_full['type'].isin(['staggered']).sum(),
+                                pso_full['type'].isin(['sequential']).sum(),
+                                pso_full['type'].isin(['fauxbourdon']).sum(),
                             ]}
                 df_hr = pd.DataFrame(data=hr_dict)
                 chart_hr = alt.Chart(df_hr).mark_bar().encode(
@@ -928,12 +928,12 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Homorhythm Subtypes from Filtered View Above")
                 st.write(chart_hr+text_hr)
 # CAD here
-            if mt_sub['musical_type'].isin(['cadence']).any():
+            if mto_sub['musical_type'].isin(['cadence']).any():
                 cd_dict = {'Cadence Type':['authentic','phrygian','plagal'],
                             'countcdtypes': [
-                                mt_full['type'].isin(['authentic']).sum(),
-                                mt_full['type'].isin(['phrygian']).sum(),
-                                mt_full['type'].isin(['plagal']).sum(),
+                                pso_full['type'].isin(['authentic']).sum(),
+                                pso_full['type'].isin(['phrygian']).sum(),
+                                pso_full['type'].isin(['plagal']).sum(),
                             ]}
                 df_cd = pd.DataFrame(data=cd_dict)
                 chart_cd = alt.Chart(df_cd).mark_bar().encode(
@@ -950,18 +950,18 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Cadence Types from Filtered View Above")
                 st.write(chart_cd+text_cd)
 # cad Tone
-            if mt_sub['musical_type'].isin(['cadence']).any():
+            if mto_sub['musical_type'].isin(['cadence']).any():
                 ct_dict = {'Cadence Tone':['C','D','E-flat', 'E', 'F', 'G', 'A', 'B-flat', 'B'],
                             'countcdtones': [
-                                mt_full['cadence_tone'].isin(['C']).sum(),
-                                mt_full['cadence_tone'].isin(['D']).sum(),
-                                mt_full['cadence_tone'].isin(['E_flat']).sum(),
-                                mt_full['cadence_tone'].isin(['E']).sum(),
-                                mt_full['cadence_tone'].isin(['F']).sum(),
-                                mt_full['cadence_tone'].isin(['G']).sum(),
-                                mt_full['cadence_tone'].isin(['A']).sum(),
-                                mt_full['cadence_tone'].isin(['B_flat']).sum(),
-                                mt_full['cadence_tone'].isin(['B']).sum(),
+                                pso_full['cadence_tone'].isin(['C']).sum(),
+                                pso_full['cadence_tone'].isin(['D']).sum(),
+                                pso_full['cadence_tone'].isin(['E_flat']).sum(),
+                                pso_full['cadence_tone'].isin(['E']).sum(),
+                                pso_full['cadence_tone'].isin(['F']).sum(),
+                                pso_full['cadence_tone'].isin(['G']).sum(),
+                                pso_full['cadence_tone'].isin(['A']).sum(),
+                                pso_full['cadence_tone'].isin(['B_flat']).sum(),
+                                pso_full['cadence_tone'].isin(['B']).sum(),
                             ]}
                 df_cd = pd.DataFrame(data=ct_dict)
                 chart_ct = alt.Chart(df_cd).mark_bar().encode(
@@ -1027,12 +1027,12 @@ if st.sidebar.checkbox('Select Observations'):
         showfiltered = st.sidebar.checkbox('Show subtype charts for filtered results', value=False)
         if showfiltered:
 # Cantus firmus chart_rt
-            if piece_sub['musical_type'].isin(['cantus firmus']).any():
+            if pieceo_sub['musical_type'].isin(['cantus firmus']).any():
                cf_dict = {'Subtypes':['both pitches and durations', 'pitches only', 'durations only'],
                'count': [
-                    piece_full['features'].isin(['both pitches and durations']).sum(),
-                    piece_full['features'].isin(['pitches only']).sum(),
-                    piece_full['features'].isin(['durations only']).sum(),
+                    pso_full['features'].isin(['both pitches and durations']).sum(),
+                    pso_full['features'].isin(['pitches only']).sum(),
+                    pso_full['features'].isin(['durations only']).sum(),
                ]}
                df_cf = pd.DataFrame(data=cf_dict)
                chart_cf = alt.Chart(df_cf).mark_bar().encode(
@@ -1049,12 +1049,12 @@ if st.sidebar.checkbox('Select Observations'):
                st.write("Cantus Firmus Subtypes from Filtered View Above")
                st.write(chart_cf+text_cf)
 # Soggetto chart_rt
-            if piece_sub['musical_type'].isin(['soggetto']).any():
+            if pieceo_sub['musical_type'].isin(['soggetto']).any():
                sg_dict = {'Subtypes':['both pitches and durations', 'pitches only', 'durations only'],
                'count': [
-                    piece_full['features'].isin(['both pitches and durations']).sum(),
-                    piece_full['features'].isin(['pitches only']).sum(),
-                    piece_full['features'].isin(['durations only']).sum(),
+                    pso_full['features'].isin(['both pitches and durations']).sum(),
+                    pso_full['features'].isin(['pitches only']).sum(),
+                    pso_full['features'].isin(['durations only']).sum(),
                ]}
                df_sg = pd.DataFrame(data=sg_dict)
                chart_sg = alt.Chart(df_sg).mark_bar().encode(
@@ -1071,12 +1071,12 @@ if st.sidebar.checkbox('Select Observations'):
                st.write("Soggetto Subtypes from Filtered View Above")
                st.write(chart_sg+text_sg)
 # C Soggetto chart_rt
-            if piece_sub['musical_type'].isin(['counter soggetto']).any():
+            if pieceo_sub['musical_type'].isin(['counter soggetto']).any():
                csg_dict = {'Subtypes':['both pitches and durations', 'pitches only', 'durations only'],
                'count': [
-                    piece_full['features'].isin(['both pitches and durations']).sum(),
-                    piece_full['features'].isin(['pitches only']).sum(),
-                    piece_full['features'].isin(['durations only']).sum(),
+                    pso_full['features'].isin(['both pitches and durations']).sum(),
+                    pso_full['features'].isin(['pitches only']).sum(),
+                    pso_full['features'].isin(['durations only']).sum(),
                ]}
                df_csg = pd.DataFrame(data=csg_dict)
                chart_csg = alt.Chart(df_csg).mark_bar().encode(
@@ -1093,10 +1093,10 @@ if st.sidebar.checkbox('Select Observations'):
                st.write("Soggetto Subtypes from Filtered View Above")
                st.write(chart_csg+text_csg)
 # Contrapuntal Duo chart_rt
-            if piece_sub['musical_type'].isin(['contrapuntal duo']).any():
+            if pieceo_sub['musical_type'].isin(['contrapuntal duo']).any():
                cd_dict = {'Subtypes':['contrapuntal duos'],
                'count': [
-                    piece_full['musical_type'].isin(['contrapuntal duo']).sum(),
+                    pso_full['musical_type'].isin(['contrapuntal duo']).sum(),
 
                ]}
                df_cd = pd.DataFrame(data=cd_dict)
@@ -1114,13 +1114,13 @@ if st.sidebar.checkbox('Select Observations'):
                st.write("Soggetto Subtypes from Filtered View Above")
                st.write(chart_cd+text_cd)
 # FUGA Chart
-            if piece_sub['musical_type'].isin(['fuga']).any():
+            if pieceo_sub['musical_type'].isin(['fuga']).any():
                 fg_dict = {'Subtypes':['periodic', 'sequential', 'inverted', 'retrograde'],
                 'count': [
-                    piece_full['periodic'].sum(),
-                    piece_full['sequential'].sum(),
-                    piece_full['inverted'].sum(),
-                    piece_full['retrograde'].sum(),
+                    pso_full['periodic'].sum(),
+                    pso_full['sequential'].sum(),
+                    pso_full['inverted'].sum(),
+                    pso_full['retrograde'].sum(),
                 ]}
                 df_fg = pd.DataFrame(data=fg_dict)
                 chart_fg = alt.Chart(df_fg).mark_bar().encode(
@@ -1137,12 +1137,12 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Fuga Subtypes from Filtered View Above")
                 st.write(chart_fg+text_fg)
 # PEN chart
-            if piece_sub['musical_type'].isin(['periodic entry']).any():
+            if pieceo_sub['musical_type'].isin(['periodic entry']).any():
                 pe_dict = {'Subtypes':['sequential', 'invertible counterpoint', 'added entries'],
                             'count': [
-                                piece_full['sequential'].sum(),
-                                piece_full['invertible_counterpoint'].sum(),
-                                piece_full['added_entries'].sum(),
+                                pso_full['sequential'].sum(),
+                                pso_full['invertible_counterpoint'].sum(),
+                                pso_full['added_entries'].sum(),
                             ]}
                 df_pe = pd.DataFrame(data=pe_dict)
                 chart_pe = alt.Chart(df_pe).mark_bar().encode(
@@ -1159,12 +1159,12 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Periodic Entry Subtypes from Filtered View Above")
                 st.write(chart_pe+text_pe)
 # ID Subtypes
-            if piece_sub['musical_type'].isin(['imitative duo']).any():
+            if pieceo_sub['musical_type'].isin(['imitative duo']).any():
 
                 id_dict = {'Subtypes':['invertible counterpoint', 'added entries'],
                             'count': [
-                                piece_full['invertible_counterpoint'].sum(),
-                                piece_full['added_entries'].sum(),
+                                pso_full['invertible_counterpoint'].sum(),
+                                pso_full['added_entries'].sum(),
                             ]}
                 df_id = pd.DataFrame(data=id_dict)
                 chart_id = alt.Chart(df_id).mark_bar().encode(
@@ -1182,13 +1182,13 @@ if st.sidebar.checkbox('Select Observations'):
 
                 st.write(chart_id+text_id)
 # NIM here
-            if piece_sub['musical_type'].isin(['non-imitative duo']).any():
+            if pieceo_sub['musical_type'].isin(['non-imitative duo']).any():
 
                 nim_dict = {'Subtypes':['sequential', 'invertible counterpoint', 'added entries'],
                             'count': [
-                                piece_full['sequential'].sum(),
-                                piece_full['invertible_counterpoint'].sum(),
-                                piece_full['added_entries'].sum(),
+                                pso_full['sequential'].sum(),
+                                pso_full['invertible_counterpoint'].sum(),
+                                pso_full['added_entries'].sum(),
                             ]}
                 df_nim = pd.DataFrame(data=nim_dict)
                 chart_nim = alt.Chart(df_nim).mark_bar().encode(
@@ -1205,13 +1205,13 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Non-Imitative Duo Subtypes from Filtered View Above")
                 st.write(chart_nim+text_nim)
 # HR Here
-            if piece_sub['musical_type'].isin(['homorhythm']).any():
+            if pieceo_sub['musical_type'].isin(['homorhythm']).any():
                 hr_dict = {'Subtypes':['simple', 'staggered', 'sequential', 'fauxbourdon'],
                             'count': [
-                                piece_full['type'].isin(['simple']).sum(),
-                                piece_full['type'].isin(['staggered']).sum(),
-                                piece_full['type'].isin(['sequential']).sum(),
-                                piece_full['type'].isin(['fauxbourdon']).sum(),
+                                pso_full['type'].isin(['simple']).sum(),
+                                pso_full['type'].isin(['staggered']).sum(),
+                                pso_full['type'].isin(['sequential']).sum(),
+                                pso_full['type'].isin(['fauxbourdon']).sum(),
                             ]}
                 df_hr = pd.DataFrame(data=hr_dict)
                 chart_hr = alt.Chart(df_hr).mark_bar().encode(
@@ -1228,12 +1228,12 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Homorhythm Subtypes from Filtered View Above")
                 st.write(chart_hr+text_hr)
 # CAD here
-            if piece_sub['musical_type'].isin(['cadence']).any():
+            if pieceo_sub['musical_type'].isin(['cadence']).any():
                 cd_dict = {'Cadence Type':['authentic','phrygian','plagal'],
                             'countcdtypes': [
-                                piece_full['type'].isin(['authentic']).sum(),
-                                piece_full['type'].isin(['phrygian']).sum(),
-                                piece_full['type'].isin(['plagal']).sum(),
+                                pso_full['type'].isin(['authentic']).sum(),
+                                pso_full['type'].isin(['phrygian']).sum(),
+                                pso_full['type'].isin(['plagal']).sum(),
                             ]}
                 df_cd = pd.DataFrame(data=cd_dict)
                 chart_cd = alt.Chart(df_cd).mark_bar().encode(
@@ -1250,18 +1250,18 @@ if st.sidebar.checkbox('Select Observations'):
                 st.write("Cadence Types from Filtered View Above")
                 st.write(chart_cd+text_cd)
 # cad Tone
-            if piece_sub['musical_type'].isin(['cadence']).any():
+            if pieceo_sub['musical_type'].isin(['cadence']).any():
                 ct_dict = {'Cadence Tone':['C','D','E-flat', 'E', 'F', 'G', 'A', 'B-flat', 'B'],
                             'countcdtones': [
-                                piece_full['cadence_tone'].isin(['C']).sum(),
-                                piece_full['cadence_tone'].isin(['D']).sum(),
-                                piece_full['cadence_tone'].isin(['E_flat']).sum(),
-                                piece_full['cadence_tone'].isin(['E']).sum(),
-                                piece_full['cadence_tone'].isin(['F']).sum(),
-                                piece_full['cadence_tone'].isin(['G']).sum(),
-                                piece_full['cadence_tone'].isin(['A']).sum(),
-                                piece_full['cadence_tone'].isin(['B_flat']).sum(),
-                                piece_full['cadence_tone'].isin(['B']).sum(),
+                                pso_full['cadence_tone'].isin(['C']).sum(),
+                                pso_full['cadence_tone'].isin(['D']).sum(),
+                                pso_full['cadence_tone'].isin(['E_flat']).sum(),
+                                pso_full['cadence_tone'].isin(['E']).sum(),
+                                pso_full['cadence_tone'].isin(['F']).sum(),
+                                pso_full['cadence_tone'].isin(['G']).sum(),
+                                pso_full['cadence_tone'].isin(['A']).sum(),
+                                pso_full['cadence_tone'].isin(['B_flat']).sum(),
+                                pso_full['cadence_tone'].isin(['B']).sum(),
                             ]}
                 df_cd = pd.DataFrame(data=ct_dict)
                 chart_ct = alt.Chart(df_cd).mark_bar().encode(
@@ -1514,6 +1514,119 @@ if st.sidebar.checkbox('Show Filter Menus'):
        st.subheader("Filtered Relationships")
        st.write(ps_full)
 
+       if ps_full['relationship_type'].isin(['quotation']).any():
+          st.subheader("Quotation Sub-types in Filtered Relationships")
+
+          exact = ps_full['type'].str.match('exact')
+          monnayage = ps_full['type'].str.match('monnayage')
+          rl_q_dict = {'Quotation Subtype':['exact','monnayage'],
+                      'countrltypes': [
+                          exact.sum(),
+                          monnayage.sum(),
+                      ]}
+          df_rl_q = pd.DataFrame(data=rl_q_dict)
+          chart_rl_q = alt.Chart(df_rl_q).mark_bar().encode(
+              x = 'countrltypes',
+              y = 'Quotation Subtype',
+          )
+          text_rl_q = chart_rl_q.mark_text(
+              align='left',
+              baseline='middle',
+              dx=3
+          ).encode(
+              text = 'countrltypes'
+          )
+          st.write(chart_rl_q+text_rl_q)
+
+
+
+       if ps_full['relationship_type'].isin(['mechanical transformation']).any():
+            st.subheader("Mechanical Transformation Sub-types in Filtered Relationships")
+
+
+            sound_diff = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['sounding_diff_voices']
+            melodically_inverted = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['melodically_inverted']
+            retrograde = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['retrograde']
+            metrically_shifted = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['metrically_shifted']
+            double_cpt = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['invertible_counterpoint']
+            diminution = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['diminution']
+            augmentation = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['augmentation']
+
+            # diminution = ps_full['fields.details.systematic diminution']
+            # augmentation = ps_full['fields.details.systematic augmentation']
+            rl_mt_dict = {'Mechanical Transformation Subtype':['sounding in different voices','melodically inverted',
+            'retrograde','metrically shifted', 'invertible counterpoint', 'diminution', 'augmentation'],
+                       'countrltypes': [
+                           sound_diff.sum(),
+                           melodically_inverted.sum(),
+                           retrograde.sum(),
+                           metrically_shifted.sum(),
+                           double_cpt.sum(),
+                           diminution.sum(),
+                           augmentation.sum()
+                           # transposition,
+                       ]}
+            df_rl_mt = pd.DataFrame(data=rl_mt_dict)
+            chart_rl_mt = alt.Chart(df_rl_mt).mark_bar().encode(
+               x = 'countrltypes',
+               y = 'Mechanical Transformation Subtype',
+            )
+            text_rl_mt = chart_rl_mt.mark_text(
+               align='left',
+               baseline='middle',
+               dx=3
+            ).encode(
+               text = 'countrltypes'
+            )
+            st.write(chart_rl_mt+text_rl_mt)
+
+       if ps_full['relationship_type'].isin(['non-mechanical transformation']).any():
+            st.subheader("Non-Mechanical Transformation Sub-types in Filtered Relationships")
+            # Non Mechanical Trans Chart
+            sound_diff = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['sounding_diff_voices']
+            melodically_inverted = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['melodically_inverted']
+            retrograde = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['retrograde']
+            metrically_shifted = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['whole_passage_shifted']
+            transposed =  ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['whole_passage_transposed']
+            new_cs = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['new_countersubject']
+            old_cs_tr = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['old_cs_transposed']
+            old_cs_ms = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['old_cs_shifted']
+            new_comb = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['new_combination']
+            double_cpt = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['invertible_counterpoint']
+            diminution = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['diminution']
+            augmentation = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['augmentation']
+
+
+            rl_nmt_dict = {'Non-Mechanical Transformation Subtype':['sounding in different voices','melodically inverted', 'retrograde',
+            'metrically shifted', 'transposed', 'new counter subject', 'old counter subject transposed', 'old counter subject shifted metrically'
+            , 'new combination', 'diminution', 'augmentation'],
+                       'countrltypes': [
+                           sound_diff.sum(),
+                           melodically_inverted.sum(),
+                           retrograde.sum(),
+                           metrically_shifted.sum(),
+                           transposed.sum(),
+                           new_cs.sum(),
+                           old_cs_tr.sum(),
+                           old_cs_ms.sum(),
+                           new_comb.sum(),
+                           diminution.sum(),
+                           augmentation.sum(),
+                       ]}
+            df_rl_nmt = pd.DataFrame(data=rl_nmt_dict)
+            chart_rl_nmt = alt.Chart(df_rl_nmt).mark_bar().encode(
+               x = 'countrltypes',
+               y = 'Non-Mechanical Transformation Subtype',
+            )
+            text_rl_nmt = chart_rl_nmt.mark_text(
+               align='left',
+               baseline='middle',
+               dx=3
+            ).encode(
+               text = 'countrltypes'
+            )
+            st.write(chart_rl_nmt+text_rl_nmt)
+
        st.subheader("Enter Relationship to View on CRIM Project")
 
        prefix = "https://crimproject.org/relationships/"
@@ -1561,6 +1674,120 @@ if st.sidebar.checkbox('Show Filter Menus'):
        # ps_drop_cols = ps_full.drop(columns=drop_list)
        st.subheader("Filtered Relationships")
        st.write(ps_full)
+# adding subtypes
+
+       if ps_full['relationship_type'].isin(['quotation']).any():
+          st.subheader("Quotation Sub-types in Filtered Relationships")
+
+          exact = ps_full['type'].str.match('exact')
+          monnayage = ps_full['type'].str.match('monnayage')
+          rl_q_dict = {'Quotation Subtype':['exact','monnayage'],
+                      'countrltypes': [
+                          exact.sum(),
+                          monnayage.sum(),
+                      ]}
+          df_rl_q = pd.DataFrame(data=rl_q_dict)
+          chart_rl_q = alt.Chart(df_rl_q).mark_bar().encode(
+              x = 'countrltypes',
+              y = 'Quotation Subtype',
+          )
+          text_rl_q = chart_rl_q.mark_text(
+              align='left',
+              baseline='middle',
+              dx=3
+          ).encode(
+              text = 'countrltypes'
+          )
+          st.write(chart_rl_q+text_rl_q)
+
+
+
+       if ps_full['relationship_type'].isin(['mechanical transformation']).any():
+            st.subheader("Mechanical Transformation Sub-types in Filtered Relationships")
+
+
+            sound_diff = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['sounding_diff_voices']
+            melodically_inverted = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['melodically_inverted']
+            retrograde = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['retrograde']
+            metrically_shifted = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['metrically_shifted']
+            double_cpt = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['invertible_counterpoint']
+            diminution = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['diminution']
+            augmentation = ps_full['relationship_type'].str.match('mechanical transformation') & ps_full['augmentation']
+
+            # diminution = ps_full['fields.details.systematic diminution']
+            # augmentation = ps_full['fields.details.systematic augmentation']
+            rl_mt_dict = {'Mechanical Transformation Subtype':['sounding in different voices','melodically inverted',
+            'retrograde','metrically shifted', 'invertible counterpoint', 'diminution', 'augmentation'],
+                       'countrltypes': [
+                           sound_diff.sum(),
+                           melodically_inverted.sum(),
+                           retrograde.sum(),
+                           metrically_shifted.sum(),
+                           double_cpt.sum(),
+                           diminution.sum(),
+                           augmentation.sum()
+                           # transposition,
+                       ]}
+            df_rl_mt = pd.DataFrame(data=rl_mt_dict)
+            chart_rl_mt = alt.Chart(df_rl_mt).mark_bar().encode(
+               x = 'countrltypes',
+               y = 'Mechanical Transformation Subtype',
+            )
+            text_rl_mt = chart_rl_mt.mark_text(
+               align='left',
+               baseline='middle',
+               dx=3
+            ).encode(
+               text = 'countrltypes'
+            )
+            st.write(chart_rl_mt+text_rl_mt)
+
+       if ps_full['relationship_type'].isin(['non-mechanical transformation']).any():
+            st.subheader("Non-Mechanical Transformation Sub-types in Filtered Relationships")
+            # Non Mechanical Trans Chart
+            sound_diff = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['sounding_diff_voices']
+            melodically_inverted = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['melodically_inverted']
+            retrograde = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['retrograde']
+            metrically_shifted = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['whole_passage_shifted']
+            transposed =  ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['whole_passage_transposed']
+            new_cs = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['new_countersubject']
+            old_cs_tr = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['old_cs_transposed']
+            old_cs_ms = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['old_cs_shifted']
+            new_comb = ps_full['relationship_type'].str.match('non-mechanical transformation') &  ps_full['new_combination']
+            double_cpt = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['invertible_counterpoint']
+            diminution = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['diminution']
+            augmentation = ps_full['relationship_type'].str.match('non-mechanical transformation') & ps_full['augmentation']
+
+
+            rl_nmt_dict = {'Non-Mechanical Transformation Subtype':['sounding in different voices','melodically inverted', 'retrograde',
+            'metrically shifted', 'transposed', 'new counter subject', 'old counter subject transposed', 'old counter subject shifted metrically'
+            , 'new combination', 'diminution', 'augmentation'],
+                       'countrltypes': [
+                           sound_diff.sum(),
+                           melodically_inverted.sum(),
+                           retrograde.sum(),
+                           metrically_shifted.sum(),
+                           transposed.sum(),
+                           new_cs.sum(),
+                           old_cs_tr.sum(),
+                           old_cs_ms.sum(),
+                           new_comb.sum(),
+                           diminution.sum(),
+                           augmentation.sum(),
+                       ]}
+            df_rl_nmt = pd.DataFrame(data=rl_nmt_dict)
+            chart_rl_nmt = alt.Chart(df_rl_nmt).mark_bar().encode(
+               x = 'countrltypes',
+               y = 'Non-Mechanical Transformation Subtype',
+            )
+            text_rl_nmt = chart_rl_nmt.mark_text(
+               align='left',
+               baseline='middle',
+               dx=3
+            ).encode(
+               text = 'countrltypes'
+            )
+            st.write(chart_rl_nmt+text_rl_nmt)
 
        st.subheader("Enter Relationship to View on CRIM Project")
 
@@ -1570,10 +1797,11 @@ if st.sidebar.checkbox('Show Filter Menus'):
 
        st.markdown(combined, unsafe_allow_html=True)
 
+    # downloaded
        st.subheader('Download Filtered Relationships as CSV')
-       userinput = st.text_input('Name of file for download (must include ".csv")', key='s')
-       if st.button('Download without type details', key='t'):
+       userinput = st.text_input('Name of file for download (must include ".csv")', key='y')
+       if st.button('Download without type details', key='m'):
            download_csv(ps_sub, userinput)
        st.write('or')
-       if st.button('Download with type details', key='u'):
+       if st.button('Download with type details', key='n'):
            download_csv(ps_full, userinput)
