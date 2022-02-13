@@ -486,32 +486,6 @@ df_r = get_data('https://crimproject.org/data/relationships')
 
 
 # # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
-df_r.rename(columns={
-                    'observer.name':'observer_name',
-                    'relationship_type': 'relationship_type',
-                    'model_observation.id': 'model_observation',
-                    'model_observation.piece.piece_id': 'model',
-                    'derivative_observation.id': 'derivative_observation',
-                    'derivative_observation.piece.piece_id': 'derivative',
-                    'details.type': 'type',
-                    'details.self': 'self',
-                    'details.activity': 'activity',
-                    'details.extent': 'extent',
-                    'details.new counter subject': 'new_countersubject',
-                    'details.sounding in different voices': "sounding_diff_voices",
-                    'details.whole passage transposed': 'whole_passage_transposed',
-                    'details.whole passage metrically shifted': 'whole_passage_shifted',
-                    'details.melodically inverted': 'melodically_inverted',
-                    'details.retrograde': 'retrograde',
-                    'details.double or invertible counterpoint': 'invertible_counterpoint',
-                    'details.old counter subject shifted metrically': 'old_cs_shifted',
-                    'details.old counter subject transposed': 'old_cs_transposed',
-                    'details.new combination': 'new_combination',
-                    'details.metrically shifted': 'metrically_shifted',
-                    'details.transposition': 'transposition',
-                    'details.systematic diminution': 'diminution',
-                    'details.systematic augmentation': 'augmentation',
-                        }, inplace=True)
 
 convert_dict_r = {'id': int,
                }
@@ -544,7 +518,8 @@ df_r.rename(columns={'pk': 'id',
                     'fields.details.systematic augmentation': 'augmentation',
                         }, inplace=True)
 
-r_drop_list = ['musical_type',
+r_drop_list = ['url',
+               'musical_type',
                'curated',
                'created',
                'updated',
@@ -585,11 +560,44 @@ dfs_combined2 = pd.merge(dfs_combined,
                      right_on='id',
                      how='outer')
 # drop redundant columns
-dfs_combined2.drop(columns=['id', 'id_y'], inplace=True)
+dfs_combined2.drop(columns=['piece_id_x', 'piece_id_y', 'id_y', 'id'], inplace=True)
 # rename the new columns
 dfs_combined2.rename(columns={'id_x': 'id',
                            'musical_type_x': 'model_musical_type',
                            'musical_type_y': 'derivative_musical_type'}, inplace=True)
+col_order_rels = ['id',
+                    'relationship_type',
+                    'observer_name',
+                    'model_observation',
+                    'model',
+                    'model_musical_type',
+                    'derivative_observation',
+                    'derivative',
+                    'derivative_musical_type',
+                    'activity',
+                    'extent',
+                    'self',
+                    'type',
+                    'retrograde',
+                    'new_combination',
+                    'new_countersubject',
+                    'melodically_inverted',
+                    'metrically_shifted',
+                    'whole_passage_transposed',
+                    'whole_passage_shifted',
+                    'sounding_diff_voices',
+                    'transposition',
+                    'old_cs_transposed',
+                    'old_cs_shifted',
+                    'invertible_counterpoint',
+                    'diminution',
+                    'augmentation',
+                    'details',
+                    ]
+
+dfs_combined2 = dfs_combined2.reindex(columns=col_order_rels)
+
+
 df_r_with_obs = dfs_combined2
 
 select_data_r = df_r_with_obs[['id',
@@ -951,13 +959,13 @@ if st.sidebar.checkbox('Select Observations'):
 
         st.markdown(combined, unsafe_allow_html=True)
 
-        st.subheader('Download Filtered Results as CSV')
-        userinput = st.text_input('Name of file for download (must include ".csv")', key='1')
+        st.subheader('Download Filtered Observations as CSV')
+        userinput = st.text_input('Name of file for download (must include ".csv")', key='z')
         if st.button('Download without type details', key='11'):
-            download_csv(mt_sub, userinput)
+            download_csv(pso_sub, userinput)
         st.write('or')
         if st.button('Download with type details', key='12'):
-            download_csv(mt_full, userinput)
+            download_csv(pso_full, userinput)
 
 
    else:
@@ -1252,13 +1260,13 @@ if st.sidebar.checkbox('Select Observations'):
 
         st.markdown(combined, unsafe_allow_html=True)
 
-        st.subheader('Download Filtered Results as CSV')
+        st.subheader('Download Filtered Observations as CSV')
         userinput = st.text_input('Name of file for download (must include ".csv")', key='2')
         if st.button('Download without type details', key='9'):
-            download_csv(piece_sub, userinput)
+            download_csv(pso_sub, userinput)
         st.write('or')
         if st.button('Download with type details', key='10'):
-            download_csv(piece_full, userinput)
+            download_csv(pso_full, userinput)
 
 
 
@@ -1432,7 +1440,7 @@ if st.sidebar.checkbox('Select Relationship Tables and Charts'):
 
     st.markdown(combined, unsafe_allow_html=True)
 
-    st.subheader("Download Relationship Data")
+    st.subheader("Download All Relationship Data")
     sa = st.text_input('Name of file for download (must include ".csv")')
    ## Button to download CSV of results
     if st.button('Download Complete Dataset as CSV'):
@@ -1479,25 +1487,50 @@ if st.sidebar.checkbox('Show Filter Menus'):
        st.subheader("Filtered Relationships")
        st.write(ps_full)
 
+      # downloaded
+       st.subheader('Download Filtered Relationships as CSV')
+       userinput = st.text_input('Name of file for download (must include ".csv")', key='y')
+       if st.button('Download without type details', key='m'):
+           download_csv(ps_sub, userinput)
+       st.write('or')
+       if st.button('Download with type details', key='n'):
+           download_csv(ps_full, userinput)
+
        #filter by type with or without pieces
    else:
        #filter by musical type
        st.sidebar.subheader("Select Relationship Type")
-       rt_frames = filter_by('relationship_type', select_data_r, df_r_with_obs, 'l')
+       rt_frames = filter_by('relationship_type', select_data_r, df_r_with_obs, 'o')
        rt_full = rt_frames[0]
        rt_sub = rt_frames[1]
        # st.write(rt_full)
 
        #filter by piece with or without musical type
        st.sidebar.subheader("Then Select Model Piece")
-       mpiece_frames = filter_by('model', rt_sub, rt_full, 'm')
+       mpiece_frames = filter_by('model', rt_sub, rt_full, 'p')
        mpiece_full = mpiece_frames[0]
        mpiece_sub = mpiece_frames[1]
        # st.write(mpiece_sub)
 
        st.sidebar.subheader("Then Select Derivative Piece")
-       dpiece_frames = filter_by('derivative', mpiece_sub, mpiece_full, 'n')
+       dpiece_frames = filter_by('derivative', mpiece_sub, mpiece_full, 'q')
        dpiece_full = dpiece_frames[0]
        dpiece_sub = dpiece_frames[1]
        st.subheader("Filtered Relationships")
-       st.write(dpiece_full)
+       # st.write(dpiece_full)
+
+       st.sidebar.subheader("Then filter by person")
+       ps_frames = filter_by('observer_name', dpiece_sub, dpiece_full, 'r')
+       ps_full = ps_frames[0]
+       ps_sub = ps_frames[1]
+       # ps_drop_cols = ps_full.drop(columns=drop_list)
+       st.subheader("Filtered Relationships")
+       st.write(ps_full)
+
+       st.subheader('Download Filtered Relationships as CSV')
+       userinput = st.text_input('Name of file for download (must include ".csv")', key='s')
+       if st.button('Download without type details', key='t'):
+           download_csv(ps_sub, userinput)
+       st.write('or')
+       if st.button('Download with type details', key='u'):
+           download_csv(ps_full, userinput)
