@@ -451,7 +451,7 @@ df_clean = df.drop(columns=drop_list)
 
 col_order = ['id',
  'piece_id',
- # 'full_title',
+ 'full_title',
  'musical_type',
  'measures',
  'observer_name',
@@ -496,8 +496,10 @@ df_r.rename(columns={'observer.name':'observer_name',
                     'relationship_type': 'relationship_type',
                     'model_observation.id': 'model_observation',
                     'model_observation.piece.piece_id': 'model',
+                    'model_observation.piece.full_title': 'model_title',
                     'derivative_observation.id': 'derivative_observation',
                     'derivative_observation.piece.piece_id': 'derivative',
+                    'derivative_observation.piece.full_title':  'derivative_title',
                     'details.type': 'type',
                     'details.self': 'self',
                     'details.activity': 'activity',
@@ -553,11 +555,11 @@ r_drop_list = ['url',
                'observer',
                'model_observation.url',
                'model_observation.piece.url',
-               'model_observation.piece.full_title',
+               # 'model_observation.piece.full_title',
                'model_observation.ema',
                'derivative_observation.url',
                'derivative_observation.piece.url',
-               'derivative_observation.piece.full_title',
+               # 'derivative_observation.piece.full_title',
                'derivative_observation.ema',
                 'definition.url',
                 'definition.id',
@@ -567,11 +569,11 @@ r_drop_list = ['url',
 
 df_r_clean = df_r.drop(columns=r_drop_list)
 
-select_data = df[["id", "observer_name", "piece_id", "musical_type", 'measures']]
+select_data = df[["id", "observer_name", "piece_id", "full_title", "musical_type", 'measures']]
 
 #  adds piece_ids and musical_types back into relationship dataframe
 # first:  the relevant data from the obs df:
-df_short = df[['id', 'piece_id', 'musical_type']]
+df_short = df[['id', 'full_title', 'piece_id', 'musical_type']]
 #
 # now a pair of merges based on intersectino of obs ids in the two dfs:
 dfs_combined = pd.merge(df_r_clean,
@@ -595,9 +597,11 @@ col_order_rels = ['id',
                     'observer_name',
                     'model_observation',
                     'model',
+                    'model_title',
                     'model_musical_type',
                     'derivative_observation',
                     'derivative',
+                    'derivative_title',
                     'derivative_musical_type',
                     'activity',
                     'extent',
@@ -633,7 +637,9 @@ select_data_r = df_r_with_obs[['id',
                               'model_observation',
                               'derivative_observation',
                               'model',
+                              'model_title',
                               'derivative',
+                              'derivative_title',
                               'model_musical_type',
                               'derivative_musical_type',]]
 
@@ -700,7 +706,8 @@ if st.sidebar.checkbox('Select Observations'):
         #filter by piece
         st.sidebar.subheader("Filter by piece")
         # pieceo_frames = filter_by("piece_id", select_data, df, 'a')
-        pieceo_frames = filter_by("piece_id", select_data, df_clean, 'a')
+        # pieceo_frames = filter_by("piece_id", select_data, df_clean, 'a')
+        pieceo_frames = filter_by("full_title", select_data, df_clean, 'a')
         pieceo_full = pieceo_frames[0]
         pieceo_sub = pieceo_frames[1]
         #st.write(piece_full)
@@ -1008,7 +1015,8 @@ if st.sidebar.checkbox('Select Observations'):
 
         #filter by piece with or without musical type
         st.sidebar.subheader("Then Filter by Piece")
-        pieceo_frames = filter_by('piece_id', mto_sub, mto_full, 'e')
+        # pieceo_frames = filter_by('piece_id', mto_sub, mto_full, 'e')
+        pieceo_frames = filter_by('full_title', mto_sub, mto_full, 'e')
         pieceo_full = pieceo_frames[0]
         pieceo_sub = pieceo_frames[1]
         # piece_drop_cols = piece_full.drop(columns=drop_list)
@@ -1489,12 +1497,14 @@ if st.sidebar.checkbox('Show Filter Menus'):
    if (order == 'Piece > Relationship'):
        # filter by pieces
        st.sidebar.subheader("Select Model Piece")
-       mpiece_frames = filter_by("model", select_data_r, df_r_with_obs, 'g')
+       # mpiece_frames = filter_by("model", select_data_r, df_r_with_obs, 'g')
+       mpiece_frames = filter_by("model_title", select_data_r, df_r_with_obs, 'g')
        mpiece_full = mpiece_frames[0]
        mpiece_sub = mpiece_frames[1]
 
        st.sidebar.subheader("Then Select Derivative Piece")
-       dpiece_frames = filter_by("derivative", mpiece_sub, mpiece_full, 'h')
+       # dpiece_frames = filter_by("derivative", mpiece_sub, mpiece_full, 'h')
+       dpiece_frames = filter_by("derivative_title", mpiece_sub, mpiece_full, 'h')
        dpiece_full = dpiece_frames[0]
        dpiece_sub = dpiece_frames[1]
        # st.write(dpiece_full)
@@ -1655,13 +1665,15 @@ if st.sidebar.checkbox('Show Filter Menus'):
 
        #filter by piece with or without musical type
        st.sidebar.subheader("Then Select Model Piece")
-       mpiece_frames = filter_by('model', rt_sub, rt_full, 'p')
+       # mpiece_frames = filter_by('model', rt_sub, rt_full, 'p')
+       mpiece_frames = filter_by('model_title', rt_sub, rt_full, 'p')
        mpiece_full = mpiece_frames[0]
        mpiece_sub = mpiece_frames[1]
        # st.write(mpiece_sub)
 
        st.sidebar.subheader("Then Select Derivative Piece")
-       dpiece_frames = filter_by('derivative', mpiece_sub, mpiece_full, 'q')
+       # dpiece_frames = filter_by('derivative', mpiece_sub, mpiece_full, 'q')
+       dpiece_frames = filter_by('derivative_title', mpiece_sub, mpiece_full, 'q')
        dpiece_full = dpiece_frames[0]
        dpiece_sub = dpiece_frames[1]
        # st.subheader("Filtered Relationships")
@@ -1804,4 +1816,4 @@ if st.sidebar.checkbox('Show Filter Menus'):
            download_csv(ps_sub, userinput)
        st.write('or')
        if st.button('Download with type details', key='n'):
-           download_csv(ps_full, userinput)
+           xdownload_csv(ps_full, userinput)
