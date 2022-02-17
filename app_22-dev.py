@@ -9,7 +9,6 @@ from pandas.io.json import json_normalize
 import base64
 import SessionState
 from streamlit import caching
-
 # sets up function to call Markdown File for "about"
 def read_markdown_file(markdown_file):
     return Path(markdown_file).read_text()
@@ -361,14 +360,20 @@ st.markdown(
 - Subtype tools display details as __charts__.
 - Want to view a given __observation__ or __relationship__ with notation and metadata?  Enter the given number as noted in the dialogue box.
 ''')
-
+# session = SessionState.get(run_id=0)
+# if st.button("Reset"):
+#   session.run_id += 1
 st.sidebar.write("Have you recently added Relationships to CRIM?  Refresh to view them")
 
 if st.sidebar.button("Refresh Data from CRIM Project"):
     caching.clear_cache()
+
+# st.slider("Slide me!", 0, 100, key=session.run_id)
 # st.cache speeds things up by holding data in cache
 
 @st.cache(allow_output_mutation=True)
+
+
 
 # get the data function
 def get_data(link):
