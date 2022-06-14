@@ -9,6 +9,7 @@ from pandas.io.json import json_normalize
 import base64
 import SessionState
 from streamlit import caching
+git+https://github.com/HCDigitalScholarship/intervals.git@main
 
 # sets up function to call Markdown File for "about"
 def read_markdown_file(markdown_file):
