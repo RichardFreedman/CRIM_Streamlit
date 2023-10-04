@@ -5,7 +5,8 @@ import requests
 import pandas as pd
 import numpy as np
 import altair as alt
-from pandas.io.json import json_normalize
+# from pandas.io.json import json_normalize
+from pandas import json_normalize
 import base64
 import SessionState
 from streamlit import caching
