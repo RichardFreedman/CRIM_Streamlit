@@ -356,6 +356,8 @@ st.header("CRIM Project Meta Data Viewer")
 
 st.write("These tools assemble metadata for about 5000 observations and 2500 relationships in Citations: The Renaissance Imitation Mass.")
 st.write("Visit the [CRIM Project](https://crimproject.org) and its [Members Pages] (https://sites.google.com/haverford.edu/crim-project/home).")
+
+st.write("[Take a Video Tour of the Advanced Search Engine (starting at 12:30 into the video)](https://haverford.app.box.com/s/g4dzw2178e8u7wuaslvigoit6l26501c)")
 st.markdown(
 
 '''
@@ -393,7 +395,9 @@ def get_data(link):
     return df
 
 
-df = get_data('https://crimproject.org/data/observations')
+# df = get_data('https://crimproject.org/data/observations')
+
+df = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/master/crim/fixtures/data-2022-fresh/observation.json')
 # df = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_data.json')
 # df = requests.get('http://crimproject.org/data/observations/').json()
 
@@ -501,7 +505,7 @@ df_clean = df_clean.reindex(columns=col_order)
 
 
 # st.write(df_clean)
-df_r = get_data('https://crimproject.org/data/relationships')
+df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/master/crim/fixtures/data-2022-fresh/relationship.json')
 
 
 # # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
