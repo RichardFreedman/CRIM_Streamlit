@@ -355,7 +355,7 @@ def get_subtype_charts(selected_type, origdf):
 st.header("CRIM Project Meta Data Viewer")
 
 st.write("These tools assemble metadata for about 5000 observations and 2500 relationships in Citations: The Renaissance Imitation Mass.")
-st.write("Visit the [CRIM Project](https://crimproject.org) and its [Members Pages] (https://sites.google.com/haverford.edu/crim-project/home).")
+st.write("Visit the [CRIM Project](https://crimproject.org) and its [Members Pages](https://sites.google.com/haverford.edu/crim-project/home).")
 
 st.write("[Take a Video Tour of the Advanced Search Engine (starting at 12:30 into the video)](https://haverford.app.box.com/s/g4dzw2178e8u7wuaslvigoit6l26501c)")
 st.markdown(
