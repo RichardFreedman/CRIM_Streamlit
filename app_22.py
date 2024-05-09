@@ -8,10 +8,10 @@ import altair as alt
 # from pandas.io.json import json_normalize
 from pandas import json_normalize
 import base64
-import SessionState
-import streamlit.report_thread as report_thread
+# import SessionState
+# import streamlit.report_thread as report_thread
 
-from streamlit import caching
+# from streamlit import caching
 # git+https://github.com/HCDigitalScholarship/intervals.git@main
 
 # sets up function to call Markdown File for "about"
@@ -368,16 +368,27 @@ st.markdown(
 
 st.sidebar.write("Have you recently added Relationships to CRIM?  Refresh to view them")
 
+# if st.sidebar.button("Refresh Data from CRIM Project"):
+#     caching.clear_cache()
+# # st.cache speeds things up by holding data in cache
+
+# @st.cache_data(allow_output_mutation=True)
+
+# # get the data function
+# def get_data(link):
+#     data = requests.get(link).json()
+#     #df = pd.DataFrame(data)
+#     df = pd.json_normalize(data)
+#     return df
+
+# Assuming you have a sidebar button to refresh data
 if st.sidebar.button("Refresh Data from CRIM Project"):
-    caching.clear_cache()
-# st.cache speeds things up by holding data in cache
+    st.cache_data.clear()
 
-@st.cache(allow_output_mutation=True)
-
-# get the data function
+# Correctly applying the @st.cache_data decorator
+@st.cache_data()
 def get_data(link):
     data = requests.get(link).json()
-    #df = pd.DataFrame(data)
     df = pd.json_normalize(data)
     return df
 
