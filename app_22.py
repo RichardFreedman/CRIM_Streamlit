@@ -397,7 +397,8 @@ def get_data(link):
 
 # df = get_data('https://crimproject.org/data/observations')
 
-df = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/master/crim/fixtures/data-2022-fresh/observation.json')
+# get data from the streamlit repo.  This is CRIM data as of May 2024
+df = get_data('https://raw.githubusercontent.com/RichardFreedman/CRIM_Streamlit/rich_dev/crim_data/crim_obs.json')
 # df = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_data.json')
 # df = requests.get('http://crimproject.org/data/observations/').json()
 
@@ -505,7 +506,8 @@ df_clean = df_clean.reindex(columns=col_order)
 
 
 # st.write(df_clean)
-df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/master/crim/fixtures/data-2022-fresh/relationship.json')
+# get data from the streamlit repo.  This is CRIM data as of May 2024
+df_r = get_data('https://raw.githubusercontent.com/RichardFreedman/CRIM_Streamlit/rich_dev/crim_data/crim_rels.json')
 
 
 # # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
