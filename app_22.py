@@ -9,6 +9,8 @@ import altair as alt
 from pandas import json_normalize
 import base64
 import SessionState
+import streamlit.report_thread as report_thread
+
 from streamlit import caching
 # git+https://github.com/HCDigitalScholarship/intervals.git@main
 
