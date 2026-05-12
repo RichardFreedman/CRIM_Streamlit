@@ -475,7 +475,7 @@ drop_list = ['url',
              'details',
              'full_title',
             ]
-df_clean = df.drop(columns=drop_list)
+df_clean = df.drop(columns=drop_list, errors='ignore')
 
 col_order = ['id',
  'piece_id',
