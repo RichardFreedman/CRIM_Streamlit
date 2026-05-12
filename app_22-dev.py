@@ -7,6 +7,7 @@ import numpy as np
 import altair as alt
 from pandas.io.json import json_normalize
 import base64
+import json
 import SessionState
 from streamlit import caching
 # sets up function to call Markdown File for "about"
@@ -376,14 +377,15 @@ if st.sidebar.button("Refresh Data from CRIM Project"):
 
 
 # get the data function
-def get_data(link):
-    data = requests.get(link).json()
+def get_data(filename):
+    with open(filename, 'r') as f:
+        data = json.load(f)
     #df = pd.DataFrame(data)
     df = pd.json_normalize(data)
     return df
 
 
-df = get_data('https://crimproject.org/data/observations')
+df = get_data('crim_data/crim_obs.json')
 # df = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_data.json')
 # df = requests.get('http://crimproject.org/data/observations/').json()
 
@@ -491,7 +493,7 @@ df_clean = df_clean.reindex(columns=col_order)
 
 
 # st.write(df_clean)
-df_r = get_data('https://crimproject.org/data/relationships')
+df_r = get_data('crim_data/crim_rels.json')
 
 
 # # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
