@@ -369,7 +369,7 @@ st.markdown(
 - Want to view a given __observation__ or __relationship__ with notation and metadata?  Enter the given number as noted in the dialogue box.
 ''')
 
-st.sidebar.write("Have you recently added Relationships to CRIM?  Refresh to view them")
+# st.sidebar.write("Have you recently added Relationships to CRIM?  Refresh to view them")
 
 # if st.sidebar.button("Refresh Data from CRIM Project"):
 #     caching.clear_cache()
@@ -377,7 +377,7 @@ st.sidebar.write("Have you recently added Relationships to CRIM?  Refresh to vie
 
 # @st.cache_data(allow_output_mutation=True)
 
-# # get the data function
+# get the data function
 # def get_data(link):
 #     data = requests.get(link).json()
 #     #df = pd.DataFrame(data)
@@ -385,22 +385,24 @@ st.sidebar.write("Have you recently added Relationships to CRIM?  Refresh to vie
 #     return df
 
 # Assuming you have a sidebar button to refresh data
-if st.sidebar.button("Refresh Data from CRIM Project"):
-    st.cache_data.clear()
+# if st.sidebar.button("Refresh Data from CRIM Project"):
+#     st.cache_data.clear()
 
 # Correctly applying the @st.cache_data decorator
-@st.cache_data()
-def get_data(filename):
-    with open(filename, 'r') as f:
-        data = json.load(f)
-    df = pd.json_normalize(data)
-    return df
+# @st.cache_data()
+# def get_data(filename):
+#     with open(filename, 'r') as f:
+#         data = json.load(f)
+#     df = pd.json_normalize(data)
+#     return df
 
 
 # df = get_data('https://crimproject.org/data/observations')
 
 # get data from the streamlit repo.  This is CRIM data as of May 2024
-df = get_data('crim_data/crim_obs.json')
+with open('crim_data/crim_obs.json') as f:
+    data = json.load(f)
+df = pd.DataFrame(data)
 # df = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_data.json')
 # df = requests.get('http://crimproject.org/data/observations/').json()
 
@@ -509,7 +511,11 @@ df_clean = df_clean.reindex(columns=col_order)
 
 # st.write(df_clean)
 # get data from the streamlit repo.  This is CRIM data as of May 2024
-df_r = get_data('crim_data/crim_rels.json')
+# df_r = get_data('crim_data/crim_rels.json')
+
+with open('crim_data/crim_rels.json') as f:
+    data = json.load(f)
+df_r = pd.DataFrame(data)
 
 
 # # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
