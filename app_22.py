@@ -402,7 +402,7 @@ st.markdown(
 # get data from the streamlit repo.  This is CRIM data as of May 2024
 with open('crim_data/crim_obs.json') as f:
     data = json.load(f)
-df = pd.DataFrame(data)
+df = pd.json_normalize(data)
 # df = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_data.json')
 # df = requests.get('http://crimproject.org/data/observations/').json()
 
