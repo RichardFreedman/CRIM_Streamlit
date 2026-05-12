@@ -515,7 +515,7 @@ df_clean = df_clean.reindex(columns=col_order)
 
 with open('crim_data/crim_rels.json') as f:
     data = json.load(f)
-df_r = pd.DataFrame(data)
+df_r = pd.json_normalize(data)
 
 
 # # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
