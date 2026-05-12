@@ -12,13 +12,13 @@ sudo apt install python3 python3-pip python3-venv -y
 mkdir -p ~/crim_app
 cd ~/crim_app
 
-# Clone the repo (replace with your repo URL)
-git clone https://github.com/yourusername/CRIM_Streamlit.git .
-# Or if private: git clone https://username:token@github.com/yourusername/CRIM_Streamlit.git .
+# Clone the repo from the dev branch (replace with your repo URL)
+git clone -b rich_dev https://github.com/RichardFreedman/CRIM_Streamlit.git .
+# Or if private: git clone -b rich_dev https://username:token@github.com/yourusername/CRIM_Streamlit.git .
 
 # Create virtual environment (this isolates the app's dependencies)
-python3 -m venv crim_env
-source crim_env/bin/activate
+python3 -m venv crim_stream_env
+source crim_stream_env/bin/activate
 
 # Install requirements
 pip install -r requirements.txt
@@ -29,13 +29,13 @@ pip install -r requirements.txt
 # For production, create systemd service
 sudo tee /etc/systemd/system/crim-streamlit.service > /dev/null <<EOF
 [Unit]
-Description=CRIM Streamlit App
+Description=CRIM Data Streamlit App
 After=network.target
 
 [Service]
 User=$USER
 WorkingDirectory=/home/$USER/crim_app
-ExecStart=/home/$USER/crim_app/crim_env/bin/streamlit run app_22.py --server.port 8501 --server.address 0.0.0.0 --server.headless true
+ExecStart=/home/$USER/crim_app/crim_stream_env/bin/streamlit run app_22.py --server.port 8501 --server.address 0.0.0.0 --server.headless true
 Restart=always
 
 [Install]
@@ -57,7 +57,7 @@ sudo apt install nginx -y
 sudo tee /etc/nginx/sites-available/crim-app > /dev/null <<EOF
 server {
     listen 80;
-    server_name your-domain.com;  # Replace with your domain or droplet IP
+    server_name crimdata.crimproject.org;
 
     location / {
         proxy_pass http://127.0.0.1:8501;
