@@ -8,6 +8,7 @@ import altair as alt
 # from pandas.io.json import json_normalize
 from pandas import json_normalize
 import base64
+import json
 # import SessionState
 # import streamlit.report_thread as report_thread
 
@@ -389,8 +390,9 @@ if st.sidebar.button("Refresh Data from CRIM Project"):
 
 # Correctly applying the @st.cache_data decorator
 @st.cache_data()
-def get_data(link):
-    data = requests.get(link).json()
+def get_data(filename):
+    with open(filename, 'r') as f:
+        data = json.load(f)
     df = pd.json_normalize(data)
     return df
 
@@ -398,7 +400,7 @@ def get_data(link):
 # df = get_data('https://crimproject.org/data/observations')
 
 # get data from the streamlit repo.  This is CRIM data as of May 2024
-df = get_data('https://raw.githubusercontent.com/RichardFreedman/CRIM_Streamlit/rich_dev/crim_data/crim_obs.json')
+df = get_data('crim_data/crim_obs.json')
 # df = get_data('https://raw.githubusercontent.com/RichardFreedman/crim_data/main/test_data.json')
 # df = requests.get('http://crimproject.org/data/observations/').json()
 
@@ -507,7 +509,7 @@ df_clean = df_clean.reindex(columns=col_order)
 
 # st.write(df_clean)
 # get data from the streamlit repo.  This is CRIM data as of May 2024
-df_r = get_data('https://raw.githubusercontent.com/RichardFreedman/CRIM_Streamlit/rich_dev/crim_data/crim_rels.json')
+df_r = get_data('crim_data/crim_rels.json')
 
 
 # # df_r = get_data('https://raw.githubusercontent.com/CRIM-Project/CRIM-online/dev/crim/fixtures/migrated-crimdata/cleaned_relationships.json')
