@@ -357,8 +357,10 @@ st.header("CRIM Project Meta Data Viewer")
 
 st.write("These tools assemble metadata for about 5000 observations and 2500 relationships in Citations: The Renaissance Imitation Mass.")
 st.write("Visit the [CRIM Project](https://crimproject.org) and its [Members Pages](https://sites.google.com/haverford.edu/crim-project/home).")
+st.write("Learn more about our [CRIM Musical Types Thesaurus](https://github.com/CRIM-Project/CRIM-online/blob/master/CRIM_Musical_Types_Thesaurus.md)")
+st.write("Learn more about our [CRIM Relationship Types Thesaurus](https://github.com/CRIM-Project/CRIM-online/blob/master/CRIM_Relationship_Types_Thesaurus.md)")
 
-st.write("[Take a Video Tour of the Advanced Search Engine (starting at 12:30 into the video)](https://haverford.app.box.com/s/g4dzw2178e8u7wuaslvigoit6l26501c)")
+st.write("[Take a Video Tour of the Advanced Search Engine](https://haverford.box.com/s/5bx6t33a7wmziuvnorb6dc2yc9ie1ru0)")
 st.markdown(
 
 '''
